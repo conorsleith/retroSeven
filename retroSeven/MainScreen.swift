@@ -15,7 +15,7 @@ struct MainScreen: View {
 
     var body: some View {
         VStack {
-            Button("Fetch Strava Data") {
+            Button("Refresh Strava Data") {
                 stravaData.fetchStravaActivities()
             }
             HStack {

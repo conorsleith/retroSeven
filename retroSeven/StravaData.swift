@@ -147,6 +147,11 @@ class StravaDataViewModel: ObservableObject {
     @Published var error: Error?
     private var cancellables: Set<AnyCancellable> = []
     private var storedData: Data = Data()
+    
+    init () {
+        self.fetchStravaActivities()
+        print(self.activities.count)
+    }
 
     
     func fetchStravaActivities() {
@@ -160,9 +165,8 @@ class StravaDataViewModel: ObservableObject {
             print("Couldn't get access token")
             return
         }
-        let apiUrl = "https://www.strava.com/api/v3/athlete/activities"
         
-        // Create the URL request.
+        let apiUrl = "https://www.strava.com/api/v3/athlete/activities"
         guard let baseURL = URL(string: apiUrl) else {
             isLoading = false
             error = URLError(URLError.badURL)
@@ -182,46 +186,18 @@ class StravaDataViewModel: ObservableObject {
             var request = URLRequest(url: url)
             request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
             
-            // DEBUG
-            print("URL: \(request.url?.absoluteString ?? "N/A")")
-            print("HTTP Method: \(request.httpMethod ?? "N/A")")
-            print("Headers: \(request.allHTTPHeaderFields ?? [:])")
-
-            if let bodyData = request.httpBody, let bodyString = String(data: bodyData, encoding: .utf8) {
-                print("HTTP Body: \(bodyString)")
-            }
-            // /DEBUG
+//            // DEBUG
+//            print("URL: \(request.url?.absoluteString ?? "N/A")")
+//            print("HTTP Method: \(request.httpMethod ?? "N/A")")
+//            print("Headers: \(request.allHTTPHeaderFields ?? [:])")
+//
+//            if let bodyData = request.httpBody, let bodyString = String(data: bodyData, encoding: .utf8) {
+//                print("HTTP Body: \(bodyString)")
+//            }
+//            // /DEBUG
             
             URLSession.shared.dataTaskPublisher(for: request)
                 .map(\.data)
-                .tryMap { data in
-                        // Decode the data into a JSON object (dictionary)
-                        do {
-                            let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
-                            var singleData: Data = Data()
-                            if let jsonArray = jsonObject as? [[String: Any]] {
-                                // You can now inspect the JSON dictionary
-                                do {
-                                    let _singleData = try JSONSerialization.data(withJSONObject: jsonArray[0], options: [])
-                                    singleData = _singleData
-                                    // Now 'data' contains the JSON representation of the dictionary
-                                } catch {
-                                    print("Error converting dictionary to data: \(error)")
-                                }
-                                do {
-                                    let decodedObject = try JSONDecoder().decode(StravaActivity.self, from: singleData)
-                                    print("we did it!")
-                                } catch {
-                                    print("Error decoding data into object: \(error)")
-                                }
-                                return data
-                            } else {
-                                throw NSError(domain: "YourAppDomain", code: 1, userInfo: ["message": "Failed to cast JSON as [String: Any]"])
-                            }
-                        } catch {
-                            throw error
-                        }
-                    }
                 .sink(receiveCompletion: { result in
                     switch result {
                     case .finished:
@@ -231,17 +207,9 @@ class StravaDataViewModel: ObservableObject {
                         self.error = error
                     }
                 }, receiveValue: { data in
-                    // Store the data for inspection
-                    self.storedData = data
-
-                    // You can also inspect the data here if needed
-                    // print(String(data: data, encoding: .utf8))
-
-                    // Continue decoding and updating your model as needed
                     do {
                         let activities = try JSONDecoder().decode([StravaActivity].self, from: data)
                         self.activities = activities
-                        print(self.activities.count)
                     } catch {
                         // Handle decoding errors
                         self.isLoading = false
