@@ -8,6 +8,8 @@
 import Foundation
 import Combine
 
+let MilesToMetersFactor = 0.000621371
+
 struct Athlete: Decodable {
     let id: Int
     let resourceState: Int
@@ -32,7 +34,6 @@ struct Map: Decodable {
 
 struct StravaActivity: Decodable {
     let achievementCount: Int
-//    let athlete: Athlete
     let athleteCount: Int
     let averageCadence: Double
     let averageHeartrate: Double
@@ -59,7 +60,6 @@ struct StravaActivity: Decodable {
     let locationCountry: String?
     let locationState: String?
     let manual: Bool
-//    let map: Map
     let maxHeartrate: Double
     let maxSpeed: Double
     let movingTime: Int
@@ -86,7 +86,6 @@ struct StravaActivity: Decodable {
     
     enum CodingKeys: String, CodingKey {
         case achievementCount = "achievement_count"
-//        case athlete
         case athleteCount = "athlete_count"
         case averageCadence = "average_cadence"
         case averageHeartrate = "average_heartrate"
@@ -113,7 +112,6 @@ struct StravaActivity: Decodable {
         case locationCountry = "location_country"
         case locationState = "location_state"
         case manual
-//        case map
         case maxHeartrate = "max_heartrate"
         case maxSpeed = "max_speed"
         case movingTime = "moving_time"
@@ -141,19 +139,13 @@ struct StravaActivity: Decodable {
 }
 
 class StravaDataViewModel: ObservableObject {
-//    private var authViewModel: AuthViewModel
-    @Published var activities: [StravaActivity] = []
     @Published var isLoading: Bool = false
     @Published var error: Error?
     private var cancellables: Set<AnyCancellable> = []
-    private var storedData: Data = Data()
-    
-    init () {
-        self.fetchStravaActivities()
-        print(self.activities.count)
-    }
+    @Published var activities: [StravaActivity] = []
+    @Published var currentMileage: Int = 0//{
+    @Published var expiringMileage: Int = 1//{
 
-    
     func fetchStravaActivities() {
         // Set isLoading to true to show a loading indicator in your view.
         print("Loading strava data...")
@@ -173,10 +165,11 @@ class StravaDataViewModel: ObservableObject {
             return
         }
         var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: true)
-        let today = Date().timeIntervalSince1970
+        let before = round(Date().timeIntervalSince1970)
+        let after = self.epochTimestampForOneWeekAgoMidnight()
         let parameters: [URLQueryItem] = [
-            URLQueryItem(name: "before", value: String(format: "%.0f", today)),
-            URLQueryItem(name: "after", value: String(format: "%.0f", today - 604800)),
+            URLQueryItem(name: "before", value: String(format: "%.0f", before)),
+            URLQueryItem(name: "after", value: String(format: "%.0f", after)),
             URLQueryItem(name: "page", value: "1"),
             URLQueryItem(name: "per_dpage", value: "28")
         ]
@@ -210,6 +203,11 @@ class StravaDataViewModel: ObservableObject {
                     do {
                         let activities = try JSONDecoder().decode([StravaActivity].self, from: data)
                         self.activities = activities
+                        let (sigmaSeven, expiringMileage) = self.calculateMiles(activities: activities)
+                        DispatchQueue.main.async {
+                            self.currentMileage = sigmaSeven
+                            self.expiringMileage = expiringMileage
+                        }
                     } catch {
                         // Handle decoding errors
                         self.isLoading = false
@@ -217,6 +215,77 @@ class StravaDataViewModel: ObservableObject {
                     }
                 })
                 .store(in: &cancellables)
+        }
+    }
+
+    func epochTimestampForOneWeekAgoMidnight() -> TimeInterval {
+        let calendar = Calendar.current
+        let currentDate = Date()
+
+        // Calculate the date one week ago from today
+        if let oneWeekAgo = calendar.date(byAdding: .weekOfYear, value: -1, to: currentDate) {
+
+            // Create a date representing 12:00 AM on the one-week-ago date
+            var components = calendar.dateComponents([.year, .month, .day], from: oneWeekAgo)
+            components.hour = 0
+            components.minute = 0
+            components.second = 0
+
+            if let dateAtMidnight = calendar.date(from: components) {
+
+                // Calculate and return the epoch timestamp
+                return round(dateAtMidnight.timeIntervalSince1970)
+            }
+        }
+        return TimeInterval() // Return nil if there was an error
+    }
+
+    func isDateInOneWeekInterval(_ date: Date) -> Bool {
+        let calendar = Calendar.current
+        let currentDate = Date()
+
+        // Calculate the start of today at 12:00 AM
+        let startOfToday = calendar.startOfDay(for: currentDate)
+        if let endOfToday = calendar.date(byAdding: .day, value: 1, to: startOfToday),
+           let startOfOneWeekAgo = calendar.date(byAdding: .day, value: -6, to: startOfToday) {
+            // Check if the date falls within the range
+            return date >= startOfOneWeekAgo && date < endOfToday
+        }
+        return false
+    }
+
+    func calculateMiles(activities: [StravaActivity]) -> (Int, Int) {
+        let runningActivities = activities
+            .filter { activity in
+            return activity.sportType == "Run"
+        }
+        let currentActivities: [StravaActivity] = runningActivities
+            .filter { activity in
+                return isDateInOneWeekInterval(getDateFromTimestamp(timestampString: activity.startDateLocal))
+            }
+        let expiringActivities: [StravaActivity] = runningActivities
+            .filter { activity in
+                return !isDateInOneWeekInterval(getDateFromTimestamp(timestampString: activity.startDateLocal))
+            }
+        let currentDistance = currentActivities.reduce(0.0) { (result, activity) in
+            return result + activity.distance * MilesToMetersFactor
+        }
+        let expiringDistance = expiringActivities.reduce(0.0) { (result, activity) in
+            return result + activity.distance * MilesToMetersFactor
+        }
+        return (Int(round(currentDistance)), Int(round(expiringDistance)))
+    }
+
+    func getDateFromTimestamp(timestampString: String) -> Date {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'"
+        dateFormatter.timeZone = TimeZone.current // Assuming your timestamp is in UTC
+
+        if let date = dateFormatter.date(from: timestampString) {
+            return date
+        } else {
+            print("Failed to parse the timestamp string.")
+            return Date()
         }
     }
 }
