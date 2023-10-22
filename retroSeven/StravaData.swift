@@ -32,7 +32,7 @@ struct Map: Decodable {
 
 struct StravaActivity: Decodable {
     let achievementCount: Int
-    let athlete: Athlete
+//    let athlete: Athlete
     let athleteCount: Int
     let averageCadence: Double
     let averageHeartrate: Double
@@ -59,7 +59,7 @@ struct StravaActivity: Decodable {
     let locationCountry: String?
     let locationState: String?
     let manual: Bool
-    let map: Map
+//    let map: Map
     let maxHeartrate: Double
     let maxSpeed: Double
     let movingTime: Int
@@ -86,7 +86,7 @@ struct StravaActivity: Decodable {
     
     enum CodingKeys: String, CodingKey {
         case achievementCount = "achievement_count"
-        case athlete
+//        case athlete
         case athleteCount = "athlete_count"
         case averageCadence = "average_cadence"
         case averageHeartrate = "average_heartrate"
@@ -113,7 +113,7 @@ struct StravaActivity: Decodable {
         case locationCountry = "location_country"
         case locationState = "location_state"
         case manual
-        case map
+//        case map
         case maxHeartrate = "max_heartrate"
         case maxSpeed = "max_speed"
         case movingTime = "moving_time"
@@ -241,6 +241,7 @@ class StravaDataViewModel: ObservableObject {
                     do {
                         let activities = try JSONDecoder().decode([StravaActivity].self, from: data)
                         self.activities = activities
+                        print(self.activities.count)
                     } catch {
                         // Handle decoding errors
                         self.isLoading = false
@@ -248,8 +249,6 @@ class StravaDataViewModel: ObservableObject {
                     }
                 })
                 .store(in: &cancellables)
-            print("Okay, did a thing")
-            print(self.activities.count)
         }
     }
 }
