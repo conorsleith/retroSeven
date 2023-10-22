@@ -10,25 +10,49 @@ import SwiftUI
 class AuthViewModel: ObservableObject {
     @Published var isAuthenticated: Bool = false
     @Published var oauthToken = ""
+    @StateObject private var authViewModel: AuthViewModel = AuthViewModel()
 
     // Add methods to handle authentication (e.g., login, logout).
     // You can also store the access token and other relevant data here.
-    func saveRefreshTokenToKeychain(refreshToken: String, service: String) -> Bool {
-        if let data = refreshToken.data(using: .utf8) {
-            let query: [String: Any] = [
-                kSecClass as String: kSecClassGenericPassword,
-                kSecAttrService as String: service,
-                kSecValueData as String: data,
-                kSecAttrAccessible as String: kSecAttrAccessibleWhenUnlockedThisDeviceOnly
-            ]
-            let status = SecItemAdd(query as CFDictionary, nil)
-
-            return status == errSecSuccess
+    static func saveTokenToKeychain(token: String, service: String) {
+        if let data = token.data(using: .utf8) {
+            // Check if a token already exists for the service
+            if let existingToken = retrieveTokenFromKeychain(service: service) {
+                // Update the existing token
+                let updateQuery: [String: Any] = [
+                    kSecClass as String: kSecClassGenericPassword,
+                    kSecAttrService as String: service,
+                ]
+                let updateAttributes: [String: Any] = [
+                    kSecValueData as String: data
+                ]
+                let status = SecItemUpdate(updateQuery as CFDictionary, updateAttributes as CFDictionary)
+                
+                if status == errSecSuccess {
+                    print("Token updated in Keychain")
+                } else {
+                    print("Failed to update token in Keychain")
+                }
+            } else {
+                // Add the token if it doesn't exist
+                let addQuery: [String: Any] = [
+                    kSecClass as String: kSecClassGenericPassword,
+                    kSecAttrService as String: service,
+                    kSecValueData as String: data,
+                    kSecAttrAccessible as String: kSecAttrAccessibleWhenUnlockedThisDeviceOnly
+                ]
+                let status = SecItemAdd(addQuery as CFDictionary, nil)
+                
+                if status == errSecSuccess {
+                    print("Token saved to Keychain")
+                } else {
+                    print("Failed to save token to Keychain")
+                }
+            }
         }
-        return false
     }
 
-    func retrieveRefreshTokenFromKeychain(service: String) -> String? {
+    static func retrieveTokenFromKeychain(service: String) -> String? {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: service,

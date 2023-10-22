@@ -42,15 +42,13 @@ struct AuthenticationView: View {
     func startStravaOAuth() {
         self.oauthswift.authorize(
             withCallbackURL: URL(string: self.redirectURI)!,
-            scope: "activity:read_all", // Define the desired scope
+            scope: "activity:read_all",
             state: "yourState") { result in
-
             switch result {
-            case .success(let (credential, _, _)):
+            case .success((let credential, _, _)):
                 // Store the access token securely for future API requests.
-                let accessToken = credential.oauthToken
-                authViewModel.oauthToken = accessToken
-                authViewModel.saveRefreshTokenToKeychain(refreshToken: credential.oauthRefreshToken, service: "com.retroseven.strava")
+                var success = AuthViewModel.saveTokenToKeychain(token: credential.oauthRefreshToken, service: "com.retroseven.stravaRefreshToken")
+                success = AuthViewModel.saveTokenToKeychain(token: credential.oauthToken, service: "com.retroseven.stravaToken")
                 self.isAuthenticating = false
                 authViewModel.isAuthenticated = true
                 // You can now transition to the main screen.

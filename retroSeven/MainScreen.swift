@@ -7,6 +7,7 @@
 import SwiftUI
 
 struct MainScreen: View {
+    @EnvironmentObject var authViewModel: AuthViewModel
     @State private var leftNumber = 123
     @State private var rightNumber = 456
     @StateObject private var stravaData = StravaDataViewModel()
