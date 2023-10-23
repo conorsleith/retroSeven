@@ -146,16 +146,24 @@ class StravaDataViewModel: ObservableObject {
     @Published var currentMileage: Int = 0//{
     @Published var expiringMileage: Int = 1//{
 
-    func fetchStravaActivities() {
+    func retrieveToken(service: String) -> String? {
+        if let tokenResponse = AuthViewModel.retrieveTokenFromKeychain(service: "com.retroseven.stravaToken") {
+            return tokenResponse
+        } else {
+            print("Couldn't get access token")
+            return nil
+        }
+    }
+    func fetchStravaActivities(authViewModel: AuthViewModel) {
         // Set isLoading to true to show a loading indicator in your view.
         print("Loading strava data...")
         isLoading = true
-        var accessToken: String
-        if let tokenResponse = AuthViewModel.retrieveTokenFromKeychain(service: "com.retroseven.stravaToken") {
-            accessToken = tokenResponse
-        } else {
-            print("Couldn't get access token")
-            return
+        // authViewModel.startStravaOAuth()
+        var accessToken: String = ""
+        while (accessToken == "") {
+            if let tokenResponse = retrieveToken(service: "com.retroseven.StravaToken") {
+                accessToken = tokenResponse
+            }
         }
         
         let apiUrl = "https://www.strava.com/api/v3/athlete/activities"
@@ -176,46 +184,53 @@ class StravaDataViewModel: ObservableObject {
         components?.queryItems = parameters
         
         if let url = components?.url {
-            var request = URLRequest(url: url)
-            request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
-            
-//            // DEBUG
-//            print("URL: \(request.url?.absoluteString ?? "N/A")")
-//            print("HTTP Method: \(request.httpMethod ?? "N/A")")
-//            print("Headers: \(request.allHTTPHeaderFields ?? [:])")
-//
-//            if let bodyData = request.httpBody, let bodyString = String(data: bodyData, encoding: .utf8) {
-//                print("HTTP Body: \(bodyString)")
-//            }
-//            // /DEBUG
-            
-            URLSession.shared.dataTaskPublisher(for: request)
-                .map(\.data)
-                .sink(receiveCompletion: { result in
-                    switch result {
-                    case .finished:
-                        break
-                    case .failure(let error):
-                        self.isLoading = false
-                        self.error = error
-                    }
-                }, receiveValue: { data in
-                    do {
-                        let activities = try JSONDecoder().decode([StravaActivity].self, from: data)
-                        self.activities = activities
-                        let (sigmaSeven, expiringMileage) = self.calculateMiles(activities: activities)
-                        DispatchQueue.main.async {
-                            self.currentMileage = sigmaSeven
-                            self.expiringMileage = expiringMileage
-                        }
-                    } catch {
-                        // Handle decoding errors
-                        self.isLoading = false
-                        self.error = error
-                    }
-                })
-                .store(in: &cancellables)
+            makeFetchCall(url: url, accessToken: accessToken)
         }
+    }
+    func makeFetchCall(url: URL, accessToken: String) {
+        var request = URLRequest(url: url)
+        request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        
+        // DEBUG
+        print("URL: \(request.url?.absoluteString ?? "N/A")")
+        print("HTTP Method: \(request.httpMethod ?? "N/A")")
+        print("Headers: \(request.allHTTPHeaderFields ?? [:])")
+
+        if let bodyData = request.httpBody, let bodyString = String(data: bodyData, encoding: .utf8) {
+            print("HTTP Body: \(bodyString)")
+        }
+        // /DEBUG
+        
+        URLSession.shared.dataTaskPublisher(for: request)
+            .map(\.data)
+            .print("API Request Debug:")
+            .sink(receiveCompletion: { result in
+                switch result {
+                case .finished:
+                    break
+                case .failure(let error):
+                    self.isLoading = false
+                    self.error = error
+                }
+            }, receiveValue: { data in
+                do {
+                    if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] {
+                        print(json)
+                    }
+                    let activities = try JSONDecoder().decode([StravaActivity].self, from: data)
+                    self.activities = activities
+                    let (sigmaSeven, expiringMileage) = self.calculateMiles(activities: activities)
+                    DispatchQueue.main.async {
+                        self.currentMileage = sigmaSeven
+                        self.expiringMileage = expiringMileage
+                    }
+                } catch {
+                    // Handle decoding errors
+                    self.isLoading = false
+                    self.error = error
+                }
+            })
+            .store(in: &cancellables)
     }
 
     func epochTimestampForOneWeekAgoMidnight() -> TimeInterval {

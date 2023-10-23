@@ -6,14 +6,37 @@
 //
 
 import SwiftUI
+import OAuthSwift
 
 class AuthViewModel: ObservableObject {
     @Published var isAuthenticated: Bool = false
-    @Published var oauthToken = ""
-    @StateObject private var authViewModel: AuthViewModel = AuthViewModel()
+    private var redirectURI = "retroseven://retroseven.com"
+    private var oauthswift = OAuth2Swift(
+        consumerKey: "67277",
+        consumerSecret: "56fed12e582063a4ad5a44370331102080666128",
+        authorizeUrl: "https://www.strava.com/oauth/authorize",
+        accessTokenUrl: "https://www.strava.com/oauth/token",
+        responseType: "code"
+    )
 
     // Add methods to handle authentication (e.g., login, logout).
     // You can also store the access token and other relevant data here.
+    func startStravaOAuth() {
+        self.oauthswift.authorize(
+            withCallbackURL: URL(string: self.redirectURI)!,
+            scope: "activity:read_all",
+            state: "yourState") { result in
+            switch result {
+            case .success((let credential, _, _)):
+                // Store the access token securely for future API requests.
+                var success = AuthViewModel.saveTokenToKeychain(token: credential.oauthRefreshToken, service: "com.retroseven.stravaRefreshToken")
+                success = AuthViewModel.saveTokenToKeychain(token: credential.oauthToken, service: "com.retroseven.stravaToken")
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+    }
+
     static func saveTokenToKeychain(token: String, service: String) {
         if let data = token.data(using: .utf8) {
             // Check if a token already exists for the service

@@ -14,12 +14,12 @@ struct RetroSeven: App {
 
     var body: some Scene {
         WindowGroup {
-            if authViewModel.isAuthenticated {
+            if (true) {
                 MainScreen()
-            } else {
-                AuthenticationView()
                     .onOpenURL(perform: handleURL)
                     .environmentObject(authViewModel)
+            } else {
+                AuthenticationView()
             }
         }
     }

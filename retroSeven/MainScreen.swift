@@ -13,7 +13,7 @@ struct MainScreen: View {
     var body: some View {
         VStack {
             Button("Refresh Strava Data") {
-                stravaData.fetchStravaActivities()
+                stravaData.fetchStravaActivities(authViewModel: authViewModel)
             }
             HStack {
                 Text("\(stravaData.currentMileage)")
@@ -25,7 +25,7 @@ struct MainScreen: View {
             .padding()
         }
         .onAppear {
-            stravaData.fetchStravaActivities()
+            stravaData.fetchStravaActivities(authViewModel: authViewModel)
         }
         .onReceive(stravaData.$currentMileage) { newCurrentMileage in
             // Handle changes to the first derived number
@@ -34,6 +34,9 @@ struct MainScreen: View {
         .onReceive(stravaData.$expiringMileage) { newExpiringMileage in
             // Handle changes to the second derived number
             print("Second Number changed to: \(newExpiringMileage)")
+        }
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
+            stravaData.fetchStravaActivities(authViewModel: authViewModel)
         }
     }
 }
