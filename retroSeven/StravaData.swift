@@ -16,12 +16,12 @@ enum RequestStatus {
 }
 
 class StravaDataViewModel: ObservableObject {
-    @Published var isLoading: Bool = false
-    @Published var error: Error?
-    @Published var activities: [StravaActivity] = []
     @Published var currentMileage: Int = 0
     @Published var expiringMileage: Int = 0
     @Published var needsRefresh = false
+    @Published var isLoading: Bool = false
+    @Published var error: Error?
+    private var activities: [StravaActivity] = []
     private var cancellables: Set<AnyCancellable> = []
     private var requestStatus: RequestStatus?
     private var shouldFakeToken = true
@@ -86,6 +86,7 @@ class StravaDataViewModel: ObservableObject {
 //        debugPrintRequest(request: request)
         
         URLSession.shared.dataTaskPublisher(for: request)
+            .receive(on: DispatchQueue.main)
             .map(\.data)
 //            .print("API Request Debug:")
             .sink(receiveCompletion: { result in
@@ -112,12 +113,8 @@ class StravaDataViewModel: ObservableObject {
                     let activities = try JSONDecoder().decode([StravaActivity].self, from: data)
                     self.activities = activities
                     let (currentMileage, expiringMileage) = StravaDataViewModel.calculateMiles(activities: activities)
-                    DispatchQueue.main.async {
-                        self.currentMileage = currentMileage
-                        self.expiringMileage = expiringMileage
-//                        self.currentMileage += 1
-//                        self.expiringMileage += 1
-                    }
+                    self.currentMileage = currentMileage
+                    self.expiringMileage = expiringMileage
                     self.requestStatus = RequestStatus.Success
                 } catch {
                     // Handle decoding errors
