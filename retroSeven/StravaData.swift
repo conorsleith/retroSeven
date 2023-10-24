@@ -18,40 +18,52 @@ enum RequestStatus {
 class StravaDataViewModel: ObservableObject {
     @Published var isLoading: Bool = false
     @Published var error: Error?
-    private var cancellables: Set<AnyCancellable> = []
     @Published var activities: [StravaActivity] = []
-    @Published var currentMileage: Int = 0//{
-    @Published var expiringMileage: Int = 1//{
+    @Published var currentMileage: Int = 0
+    @Published var expiringMileage: Int = 0
+    @Published var needsRefresh = false
+    private var cancellables: Set<AnyCancellable> = []
     private var requestStatus: RequestStatus?
+    private var shouldFakeToken = true
 
-    func retrieveToken(authViewModel: AuthViewModel, service: String) -> String? {
-        if let tokenResponse = AuthViewModel.retrieveTokenFromKeychain(service: "com.retroseven.stravaToken") {
+    func retrieveToken() -> String? {
+        if let tokenResponse = AuthViewModel.retrieveTokenFromKeychain(service: keyChainTokenService) {
             return tokenResponse
         }
         return nil
     }
-    func fetchStravaActivities(authViewModel: AuthViewModel) {
+    
+    func fetchStravaActivities() {
         // Set isLoading to true to show a loading indicator in your view.
         print("Loading strava data...")
         isLoading = true
+        
+        // get the access token from the keychain
         var accessToken: String = ""
-        if let tokenResponse = retrieveToken(authViewModel: authViewModel, service: "com.retroseven.StravaToken") {
-            accessToken = tokenResponse
+        if let tokenResponse = retrieveToken() {
+            if (self.shouldFakeToken) {
+                accessToken = "foo"
+                self.shouldFakeToken = false
+            } else {
+                accessToken = tokenResponse
+            }
         } else {
+            // we really shouldn't be here because we're supposed to do
+            // the first authorization before entering MainScreen
             print("Couldn't authorize")
             return
         }
         
+        // Build the request URL
         let apiUrl = "https://www.strava.com/api/v3/athlete/activities"
         guard let baseURL = URL(string: apiUrl) else {
             isLoading = false
             error = URLError(URLError.badURL)
             return
         }
-
         var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: true)
         let before = round(Date().timeIntervalSince1970)
-        let after = self.epochTimestampForOneWeekAgoMidnight()
+        let after = StravaDataViewModel.epochTimestampForOneWeekAgoMidnight()
         let parameters: [URLQueryItem] = [
             URLQueryItem(name: "before", value: String(format: "%.0f", before)),
             URLQueryItem(name: "after", value: String(format: "%.0f", after)),
@@ -60,12 +72,14 @@ class StravaDataViewModel: ObservableObject {
         ]
         components?.queryItems = parameters
         
+        // Make the API call and process
         if let url = components?.url {
-            makeFetchCall(url: url, accessToken: accessToken, authviewModel: authViewModel)
+            makeFetchCall(url: url, accessToken: accessToken)
         }
     }
 
-    func makeFetchCall(url: URL, accessToken: String, authviewModel: AuthViewModel) {
+    func makeFetchCall(url: URL, accessToken: String) {
+        print("Running makeFetchCall with token: \(accessToken)")
         self.requestStatus = RequestStatus.Starting
         var request = URLRequest(url: url)
         request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
@@ -84,32 +98,32 @@ class StravaDataViewModel: ObservableObject {
                     print("Failure!")
                 }
             }, receiveValue: { data in
-                do {
+            dataProcess: do {
+                    // Let's check and see if it's an auth failure
                     if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] {
-                        print(json)
                         if let message = json["message"] as? String {
                             if message == "Authorization Error" {
                                 self.requestStatus = RequestStatus.AuthFailure
-                                if let accessToken = authviewModel.refresh() {
-                                    self.makeFetchCall(url: url, accessToken: accessToken, authviewModel: authviewModel)
-                                }
+                                self.needsRefresh = true
+                                break dataProcess
                             }
                         }
                     }
                     let activities = try JSONDecoder().decode([StravaActivity].self, from: data)
                     self.activities = activities
-                    let (sigmaSeven, expiringMileage) = self.calculateMiles(activities: activities)
+                    let (currentMileage, expiringMileage) = StravaDataViewModel.calculateMiles(activities: activities)
                     DispatchQueue.main.async {
-//                        self.currentMileage = sigmaSeven
-//                        self.expiringMileage = expiringMileage
-                        self.currentMileage += 1
-                        self.expiringMileage += 1
+                        self.currentMileage = currentMileage
+                        self.expiringMileage = expiringMileage
+//                        self.currentMileage += 1
+//                        self.expiringMileage += 1
                     }
                     self.requestStatus = RequestStatus.Success
                 } catch {
                     // Handle decoding errors
                     self.isLoading = false
                     self.error = error
+                    self.requestStatus = RequestStatus.DecodeFailure
                     print("Caught an error")
                     print(error)
                 }
@@ -117,7 +131,7 @@ class StravaDataViewModel: ObservableObject {
             .store(in: &cancellables)
     }
 
-    func epochTimestampForOneWeekAgoMidnight() -> TimeInterval {
+    static func epochTimestampForOneWeekAgoMidnight() -> TimeInterval {
         let calendar = Calendar.current
         let currentDate = Date()
 
@@ -139,7 +153,7 @@ class StravaDataViewModel: ObservableObject {
         return TimeInterval() // Return nil if there was an error
     }
 
-    func isDateInOneWeekInterval(_ date: Date) -> Bool {
+    static func isDateInOneWeekInterval(_ date: Date) -> Bool {
         let calendar = Calendar.current
         let currentDate = Date()
 
@@ -153,7 +167,7 @@ class StravaDataViewModel: ObservableObject {
         return false
     }
 
-    func calculateMiles(activities: [StravaActivity]) -> (Int, Int) {
+    static func calculateMiles(activities: [StravaActivity]) -> (Int, Int) {
         let runningActivities = activities
             .filter { activity in
             return activity.sportType == "Run"
@@ -175,7 +189,7 @@ class StravaDataViewModel: ObservableObject {
         return (Int(round(currentDistance)), Int(round(expiringDistance)))
     }
 
-    func getDateFromTimestamp(timestampString: String) -> Date {
+    static func getDateFromTimestamp(timestampString: String) -> Date {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'"
         dateFormatter.timeZone = TimeZone.current // Assuming your timestamp is in UTC
@@ -188,7 +202,7 @@ class StravaDataViewModel: ObservableObject {
         }
     }
     
-    func debugPrintRequest(request: URLRequest) {
+    static func debugPrintRequest(request: URLRequest) {
         print("URL: \(request.url?.absoluteString ?? "N/A")")
         print("HTTP Method: \(request.httpMethod ?? "N/A")")
         print("Headers: \(request.allHTTPHeaderFields ?? [:])")

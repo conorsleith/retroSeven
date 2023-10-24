@@ -17,7 +17,7 @@ func scheduleAppRefresh() {
 @main
 struct RetroSeven: App {
     @Environment(\.scenePhase) private var phase
-    @StateObject private var authViewModel = AuthViewModel()
+    @ObservedObject var authViewModel = AuthViewModel()
     @StateObject private var stravaData = StravaDataViewModel()
 
     var body: some Scene {
@@ -26,6 +26,17 @@ struct RetroSeven: App {
                 MainScreen()
                     .environmentObject(authViewModel)
                     .environmentObject(stravaData)
+                    .onReceive(authViewModel.$refreshTrigger) { newValue in
+                        if (newValue){
+                            stravaData.fetchStravaActivities()
+                            authViewModel.refreshTrigger = false
+                        }
+                    }
+                    .onReceive(stravaData.$needsRefresh) { newValue in
+                        if (newValue){
+                            authViewModel.refresh()
+                        }
+                    }
             } else {
                 AuthenticationView()
                     .onOpenURL(perform: handleURL)
@@ -39,7 +50,7 @@ struct RetroSeven: App {
             }
         }
         .backgroundTask(.appRefresh("myapprefresh")) {
-            await stravaData.fetchStravaActivities(authViewModel: authViewModel)
+            await stravaData.fetchStravaActivities()
         }
     }
     func handleURL(_ url: URL) {

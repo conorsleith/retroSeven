@@ -14,21 +14,21 @@ struct MainScreen: View {
     var body: some View {
         VStack {
             Button("Refresh Strava Data") {
-                stravaData.fetchStravaActivities(authViewModel: authViewModel)
+                stravaData.fetchStravaActivities()
             }
             HStack {
-                Text("\(stravaData.currentMileage)")
+                Text("\(stravaData.currentMileage > 0 ? "\(stravaData.currentMileage)" : "")")
                     .foregroundColor(Color(red: 0.98, green: 0.32, blue: 0.01)) // Strava orange color
-                Text("(\(stravaData.expiringMileage))")
+                Text("\(stravaData.expiringMileage > 0 ? "\(stravaData.expiringMileage)" : "")")
                     .foregroundColor(Color.gray) // Grey color
             }
             .font(.largeTitle)
             .padding()
         }
         .onAppear {
-            stravaData.fetchStravaActivities(authViewModel: authViewModel)
+            stravaData.fetchStravaActivities()
             Timer.scheduledTimer(withTimeInterval: 300, repeats: true) { timer in
-                stravaData.fetchStravaActivities(authViewModel: authViewModel)
+                stravaData.fetchStravaActivities()
             }
         }
         .onReceive(stravaData.$currentMileage) { newCurrentMileage in
@@ -40,7 +40,7 @@ struct MainScreen: View {
             print("Second Number changed to: \(newExpiringMileage)")
         }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
-            stravaData.fetchStravaActivities(authViewModel: authViewModel)
+            stravaData.fetchStravaActivities()
         }
     }
 }

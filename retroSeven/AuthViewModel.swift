@@ -8,8 +8,12 @@
 import SwiftUI
 import OAuthSwift
 
+let keyChainTokenService: String = "com.retroseven.stravaToken"
+let keyChainRefreshService: String = "com.retroseven.stravaRefreshToken"
+
 class AuthViewModel: ObservableObject {
     @Published var isAuthenticated: Bool = false
+    @Published var refreshTrigger: Bool = false
     private var redirectURI = "retroseven://retroseven.com"
     private var oauthswift = OAuth2Swift(
         consumerKey: "67277",
@@ -29,8 +33,8 @@ class AuthViewModel: ObservableObject {
             switch result {
             case .success((let credential, _, _)):
                 // Store the access token securely for future API requests.
-                var success = AuthViewModel.saveTokenToKeychain(token: credential.oauthRefreshToken, service: "com.retroseven.stravaRefreshToken")
-                success = AuthViewModel.saveTokenToKeychain(token: credential.oauthToken, service: "com.retroseven.stravaToken")
+                var success = AuthViewModel.saveTokenToKeychain(token: credential.oauthRefreshToken, service: keyChainRefreshService)
+                success = AuthViewModel.saveTokenToKeychain(token: credential.oauthToken, service: keyChainTokenService)
             case .failure(let error):
                 print(error.localizedDescription)
             }
@@ -39,7 +43,7 @@ class AuthViewModel: ObservableObject {
     
     func refresh() -> String? {
         var accessToken = ""
-        if let refreshToken = AuthViewModel.retrieveTokenFromKeychain(service: "com.retroseven.stravaRefreshToken") {
+        if let refreshToken = AuthViewModel.retrieveTokenFromKeychain(service: keyChainRefreshService) {
             self.oauthswift.renewAccessToken(withRefreshToken: refreshToken) { result in
                 switch result {
                 case .success(let (credential, response, parameters)):
@@ -47,17 +51,19 @@ class AuthViewModel: ObservableObject {
                     // The new access token is available in 'credential.oauthToken'
                     print("Access Token Renewed: \(credential.oauthToken)")
                     accessToken = credential.oauthToken
-                    AuthViewModel.saveTokenToKeychain(token: credential.oauthToken, service: "com.retroseven.stravaToken")
-                    AuthViewModel.saveTokenToKeychain(token: credential.oauthRefreshToken, service: "com.retroseven.stravaRefreshToken")
+                    AuthViewModel.saveTokenToKeychain(token: credential.oauthToken, service: keyChainTokenService)
+                    AuthViewModel.saveTokenToKeychain(token: credential.oauthRefreshToken, service: keyChainRefreshService)
+                    self.refreshTrigger = true
                 case .failure(let error):
                     // Handle the error, e.g., refresh token expiration or network issues
                     print("Token Renewal Error: \(error.localizedDescription)")
                 }
             }
-        } else {
-            return nil
         }
-        return accessToken
+        if (accessToken != "") {
+            return accessToken
+        }
+        return nil
     }
     
     func authorize() -> String? {
@@ -69,8 +75,8 @@ class AuthViewModel: ObservableObject {
             switch result {
             case .success((let credential, _, _)):
                 // Store the access token securely for future API requests.
-                var success = AuthViewModel.saveTokenToKeychain(token: credential.oauthRefreshToken, service: "com.retroseven.stravaRefreshToken")
-                success = AuthViewModel.saveTokenToKeychain(token: credential.oauthToken, service: "com.retroseven.stravaToken")
+                var success = AuthViewModel.saveTokenToKeychain(token: credential.oauthRefreshToken, service: keyChainRefreshService)
+                success = AuthViewModel.saveTokenToKeychain(token: credential.oauthToken, service: keyChainTokenService)
                 accessToken = credential.oauthToken
             case .failure(let error):
                 print(error.localizedDescription)
@@ -138,7 +144,7 @@ class AuthViewModel: ObservableObject {
     }
     
     static func isAuthorized() -> Bool {
-        if let _ = AuthViewModel.retrieveTokenFromKeychain(service: "com.retroseven.stravaToken") {
+        if let _ = AuthViewModel.retrieveTokenFromKeychain(service: keyChainTokenService) {
             return true
         }
         return false
