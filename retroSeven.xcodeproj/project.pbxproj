@@ -13,11 +13,13 @@
 		519F91802AE4412900DA8675 /* retroSevenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519F917F2AE4412900DA8675 /* retroSevenTests.swift */; };
 		519F918A2AE4412900DA8675 /* retroSevenUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519F91892AE4412900DA8675 /* retroSevenUITests.swift */; };
 		519F918C2AE4412900DA8675 /* retroSevenUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519F918B2AE4412900DA8675 /* retroSevenUITestsLaunchTests.swift */; };
-		519F91992AE4423400DA8675 /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519F91982AE4423400DA8675 /* AuthViewModel.swift */; };
 		519F919B2AE442AF00DA8675 /* MainScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519F919A2AE442AF00DA8675 /* MainScreen.swift */; };
-		519F919D2AE443EC00DA8675 /* StravaData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519F919C2AE443EC00DA8675 /* StravaData.swift */; };
 		519F919F2AE4458000DA8675 /* AuthenticationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519F919E2AE4458000DA8675 /* AuthenticationView.swift */; };
 		519F91A42AE469E600DA8675 /* OAuthSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 519F91A32AE469E600DA8675 /* OAuthSwift */; };
+		519F91AC2AE4B69400DA8675 /* StravaSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 519F91AB2AE4B69400DA8675 /* StravaSwift */; };
+		519F91F12AE742F300DA8675 /* StravaDataStructs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519F91ED2AE741F800DA8675 /* StravaDataStructs.swift */; };
+		519F91F22AE742F300DA8675 /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519F91EC2AE741F800DA8675 /* AuthViewModel.swift */; };
+		519F91F32AE742F300DA8675 /* StravaData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519F91EB2AE741F700DA8675 /* StravaData.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,11 +49,14 @@
 		519F91852AE4412900DA8675 /* retroSevenUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = retroSevenUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		519F91892AE4412900DA8675 /* retroSevenUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = retroSevenUITests.swift; sourceTree = "<group>"; };
 		519F918B2AE4412900DA8675 /* retroSevenUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = retroSevenUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		519F91982AE4423400DA8675 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
 		519F919A2AE442AF00DA8675 /* MainScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainScreen.swift; sourceTree = "<group>"; };
-		519F919C2AE443EC00DA8675 /* StravaData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StravaData.swift; sourceTree = "<group>"; };
 		519F919E2AE4458000DA8675 /* AuthenticationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationView.swift; sourceTree = "<group>"; };
 		519F91A52AE46C4A00DA8675 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		519F91B52AE724BC00DA8675 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		519F91B72AE724BC00DA8675 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		519F91EB2AE741F700DA8675 /* StravaData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StravaData.swift; sourceTree = "<group>"; };
+		519F91EC2AE741F800DA8675 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
+		519F91ED2AE741F800DA8675 /* StravaDataStructs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StravaDataStructs.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +65,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				519F91A42AE469E600DA8675 /* OAuthSwift in Frameworks */,
+				519F91AC2AE4B69400DA8675 /* StravaSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -86,6 +92,7 @@
 				519F916D2AE4412800DA8675 /* retroSeven */,
 				519F917E2AE4412900DA8675 /* retroSevenTests */,
 				519F91882AE4412900DA8675 /* retroSevenUITests */,
+				519F91B42AE724BC00DA8675 /* Frameworks */,
 				519F916C2AE4412800DA8675 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -106,9 +113,10 @@
 				519F91A52AE46C4A00DA8675 /* Info.plist */,
 				519F916E2AE4412800DA8675 /* RetroSevenApp.swift */,
 				519F919A2AE442AF00DA8675 /* MainScreen.swift */,
+				519F91EC2AE741F800DA8675 /* AuthViewModel.swift */,
+				519F91EB2AE741F700DA8675 /* StravaData.swift */,
+				519F91ED2AE741F800DA8675 /* StravaDataStructs.swift */,
 				519F919E2AE4458000DA8675 /* AuthenticationView.swift */,
-				519F919C2AE443EC00DA8675 /* StravaData.swift */,
-				519F91982AE4423400DA8675 /* AuthViewModel.swift */,
 				519F91722AE4412900DA8675 /* Assets.xcassets */,
 				519F91742AE4412900DA8675 /* Preview Content */,
 			);
@@ -140,6 +148,15 @@
 			path = retroSevenUITests;
 			sourceTree = "<group>";
 		};
+		519F91B42AE724BC00DA8675 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				519F91B52AE724BC00DA8675 /* WidgetKit.framework */,
+				519F91B72AE724BC00DA8675 /* SwiftUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -158,6 +175,7 @@
 			name = retroSeven;
 			packageProductDependencies = (
 				519F91A32AE469E600DA8675 /* OAuthSwift */,
+				519F91AB2AE4B69400DA8675 /* StravaSwift */,
 			);
 			productName = retroSeven;
 			productReference = 519F916B2AE4412800DA8675 /* retroSeven.app */;
@@ -233,6 +251,7 @@
 			mainGroup = 519F91622AE4412800DA8675;
 			packageReferences = (
 				519F91A22AE469E600DA8675 /* XCRemoteSwiftPackageReference "OAuthSwift" */,
+				519F91AA2AE4B69400DA8675 /* XCRemoteSwiftPackageReference "StravaSwift" */,
 			);
 			productRefGroup = 519F916C2AE4412800DA8675 /* Products */;
 			projectDirPath = "";
@@ -276,10 +295,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				519F91F32AE742F300DA8675 /* StravaData.swift in Sources */,
+				519F91F22AE742F300DA8675 /* AuthViewModel.swift in Sources */,
 				519F919B2AE442AF00DA8675 /* MainScreen.swift in Sources */,
+				519F91F12AE742F300DA8675 /* StravaDataStructs.swift in Sources */,
 				519F916F2AE4412800DA8675 /* RetroSevenApp.swift in Sources */,
-				519F919D2AE443EC00DA8675 /* StravaData.swift in Sources */,
-				519F91992AE4423400DA8675 /* AuthViewModel.swift in Sources */,
 				519F919F2AE4458000DA8675 /* AuthenticationView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -622,6 +642,14 @@
 				minimumVersion = 2.2.0;
 			};
 		};
+		519F91AA2AE4B69400DA8675 /* XCRemoteSwiftPackageReference "StravaSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mpclarkson/StravaSwift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.2;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -629,6 +657,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 519F91A22AE469E600DA8675 /* XCRemoteSwiftPackageReference "OAuthSwift" */;
 			productName = OAuthSwift;
+		};
+		519F91AB2AE4B69400DA8675 /* StravaSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 519F91AA2AE4B69400DA8675 /* XCRemoteSwiftPackageReference "StravaSwift" */;
+			productName = StravaSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
