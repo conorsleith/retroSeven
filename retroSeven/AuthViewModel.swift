@@ -36,6 +36,27 @@ class AuthViewModel: ObservableObject {
             }
         }
     }
+    
+    func authorize() -> String {
+        var accessToken = ""
+        if let refreshToken = AuthViewModel.retrieveTokenFromKeychain(service: "com.retroseven.stravaRefreshToken") {
+            self.oauthswift.renewAccessToken(withRefreshToken: refreshToken) { result in
+                switch result {
+                case .success(let (credential, response, parameters)):
+                    // Handle the successful token renewal here
+                    // The new access token is available in 'credential.oauthToken'
+                    print("Access Token Renewed: \(credential.oauthToken)")
+                    accessToken = credential.oauthToken
+                    AuthViewModel.saveTokenToKeychain(token: credential.oauthToken, service: "com.retroseven.stravaToken")
+                    AuthViewModel.saveTokenToKeychain(token: credential.oauthRefreshToken, service: "com.retroseven.stravaRefreshToken")
+                case .failure(let error):
+                    // Handle the error, e.g., refresh token expiration or network issues
+                    print("Token Renewal Error: \(error.localizedDescription)")
+                }
+            }
+        }
+        return accessToken
+    }
 
     static func saveTokenToKeychain(token: String, service: String) {
         if let data = token.data(using: .utf8) {
