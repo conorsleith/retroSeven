@@ -5,10 +5,11 @@
 //  Created by Conor Sleith on 10/21/23.
 //
 import SwiftUI
+import Swift
 
 struct MainScreen: View {
     @EnvironmentObject var authViewModel: AuthViewModel
-    @StateObject private var stravaData = StravaDataViewModel()
+    @EnvironmentObject var stravaData: StravaDataViewModel
 
     var body: some View {
         VStack {
@@ -26,6 +27,9 @@ struct MainScreen: View {
         }
         .onAppear {
             stravaData.fetchStravaActivities(authViewModel: authViewModel)
+            Timer.scheduledTimer(withTimeInterval: 300, repeats: true) { timer in
+                stravaData.fetchStravaActivities(authViewModel: authViewModel)
+            }
         }
         .onReceive(stravaData.$currentMileage) { newCurrentMileage in
             // Handle changes to the first derived number

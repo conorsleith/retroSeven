@@ -7,10 +7,18 @@
 
 import SwiftUI
 import OAuthSwift
+import BackgroundTasks
+    
+func scheduleAppRefresh() {
+    let request = BGAppRefreshTaskRequest(identifier: "myapprefresh")
+    try? BGTaskScheduler.shared.submit(request)
+}
 
 @main
 struct RetroSeven: App {
+    @Environment(\.scenePhase) private var phase
     @StateObject private var authViewModel = AuthViewModel()
+    @StateObject private var stravaData = StravaDataViewModel()
 
     var body: some Scene {
         WindowGroup {
@@ -18,9 +26,19 @@ struct RetroSeven: App {
                 MainScreen()
                     .onOpenURL(perform: handleURL)
                     .environmentObject(authViewModel)
+                    .environmentObject(stravaData)
             } else {
                 AuthenticationView()
             }
+        }
+        .onChange(of: phase) { newPhase in
+            switch newPhase {
+            case .background: scheduleAppRefresh()
+            default: break
+            }
+        }
+        .backgroundTask(.appRefresh("myapprefresh")) {
+            await stravaData.fetchStravaActivities(authViewModel: authViewModel)
         }
     }
     func handleURL(_ url: URL) {
