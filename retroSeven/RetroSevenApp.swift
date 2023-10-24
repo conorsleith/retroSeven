@@ -22,13 +22,14 @@ struct RetroSeven: App {
 
     var body: some Scene {
         WindowGroup {
-            if (true) {
+            if (AuthViewModel.isAuthorized()) {
                 MainScreen()
-                    .onOpenURL(perform: handleURL)
                     .environmentObject(authViewModel)
                     .environmentObject(stravaData)
             } else {
                 AuthenticationView()
+                    .onOpenURL(perform: handleURL)
+                    .environmentObject(authViewModel)
             }
         }
         .onChange(of: phase) { newPhase in

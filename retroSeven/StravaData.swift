@@ -24,24 +24,22 @@ class StravaDataViewModel: ObservableObject {
     @Published var expiringMileage: Int = 1//{
     private var requestStatus: RequestStatus?
 
-    func retrieveToken(service: String) -> String? {
+    func retrieveToken(authViewModel: AuthViewModel, service: String) -> String? {
         if let tokenResponse = AuthViewModel.retrieveTokenFromKeychain(service: "com.retroseven.stravaToken") {
             return tokenResponse
-        } else {
-            print("Couldn't get access token")
-            return nil
         }
+        return nil
     }
     func fetchStravaActivities(authViewModel: AuthViewModel) {
         // Set isLoading to true to show a loading indicator in your view.
         print("Loading strava data...")
         isLoading = true
-        // authViewModel.startStravaOAuth()
         var accessToken: String = ""
-        while (accessToken == "") {
-            if let tokenResponse = retrieveToken(service: "com.retroseven.StravaToken") {
-                accessToken = tokenResponse
-            }
+        if let tokenResponse = retrieveToken(authViewModel: authViewModel, service: "com.retroseven.StravaToken") {
+            accessToken = tokenResponse
+        } else {
+            print("Couldn't authorize")
+            return
         }
         
         let apiUrl = "https://www.strava.com/api/v3/athlete/activities"
@@ -92,8 +90,9 @@ class StravaDataViewModel: ObservableObject {
                         if let message = json["message"] as? String {
                             if message == "Authorization Error" {
                                 self.requestStatus = RequestStatus.AuthFailure
-                                let accessToken = authviewModel.authorize()
-                                self.makeFetchCall(url: url, accessToken: accessToken, authviewModel: authviewModel)
+                                if let accessToken = authviewModel.refresh() {
+                                    self.makeFetchCall(url: url, accessToken: accessToken, authviewModel: authviewModel)
+                                }
                             }
                         }
                     }
@@ -101,8 +100,10 @@ class StravaDataViewModel: ObservableObject {
                     self.activities = activities
                     let (sigmaSeven, expiringMileage) = self.calculateMiles(activities: activities)
                     DispatchQueue.main.async {
-                        self.currentMileage = sigmaSeven
-                        self.expiringMileage = expiringMileage
+//                        self.currentMileage = sigmaSeven
+//                        self.expiringMileage = expiringMileage
+                        self.currentMileage += 1
+                        self.expiringMileage += 1
                     }
                     self.requestStatus = RequestStatus.Success
                 } catch {

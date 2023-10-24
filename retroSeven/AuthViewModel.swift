@@ -37,7 +37,7 @@ class AuthViewModel: ObservableObject {
         }
     }
     
-    func authorize() -> String {
+    func refresh() -> String? {
         var accessToken = ""
         if let refreshToken = AuthViewModel.retrieveTokenFromKeychain(service: "com.retroseven.stravaRefreshToken") {
             self.oauthswift.renewAccessToken(withRefreshToken: refreshToken) { result in
@@ -54,6 +54,30 @@ class AuthViewModel: ObservableObject {
                     print("Token Renewal Error: \(error.localizedDescription)")
                 }
             }
+        } else {
+            return nil
+        }
+        return accessToken
+    }
+    
+    func authorize() -> String? {
+        var accessToken = ""
+        self.oauthswift.authorize(
+            withCallbackURL: URL(string: self.redirectURI)!,
+            scope: "activity:read_all",
+            state: "yourState") { result in
+            switch result {
+            case .success((let credential, _, _)):
+                // Store the access token securely for future API requests.
+                var success = AuthViewModel.saveTokenToKeychain(token: credential.oauthRefreshToken, service: "com.retroseven.stravaRefreshToken")
+                success = AuthViewModel.saveTokenToKeychain(token: credential.oauthToken, service: "com.retroseven.stravaToken")
+                accessToken = credential.oauthToken
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+        if (accessToken == "") {
+            return nil
         }
         return accessToken
     }
@@ -111,6 +135,13 @@ class AuthViewModel: ObservableObject {
         }
 
         return nil
+    }
+    
+    static func isAuthorized() -> Bool {
+        if let _ = AuthViewModel.retrieveTokenFromKeychain(service: "com.retroseven.stravaToken") {
+            return true
+        }
+        return false
     }
 }
 
