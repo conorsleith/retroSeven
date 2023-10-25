@@ -24,7 +24,11 @@ class StravaDataViewModel: ObservableObject {
     private var activities: [StravaActivity] = []
     private var cancellables: Set<AnyCancellable> = []
     private var requestStatus: RequestStatus?
-    private var shouldFakeToken = true
+    private var shouldFakeToken = false
+    
+    init () {
+        print("Initializing StravaDataViewModel...")
+    }
 
     func retrieveToken() -> String? {
         if let tokenResponse = AuthViewModel.retrieveTokenFromKeychain(service: keyChainTokenService) {

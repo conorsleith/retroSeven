@@ -20,6 +20,16 @@
 		519F91F12AE742F300DA8675 /* StravaDataStructs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519F91ED2AE741F800DA8675 /* StravaDataStructs.swift */; };
 		519F91F22AE742F300DA8675 /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519F91EC2AE741F800DA8675 /* AuthViewModel.swift */; };
 		519F91F32AE742F300DA8675 /* StravaData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519F91EB2AE741F700DA8675 /* StravaData.swift */; };
+		51B16D652AE9206C00613F39 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 519F91B52AE724BC00DA8675 /* WidgetKit.framework */; };
+		51B16D662AE9206C00613F39 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 519F91B72AE724BC00DA8675 /* SwiftUI.framework */; };
+		51B16D692AE9206C00613F39 /* retroSevenWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B16D682AE9206C00613F39 /* retroSevenWidgetBundle.swift */; };
+		51B16D6B2AE9206C00613F39 /* retroSevenWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B16D6A2AE9206C00613F39 /* retroSevenWidget.swift */; };
+		51B16D6D2AE9206D00613F39 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 51B16D6C2AE9206D00613F39 /* Assets.xcassets */; };
+		51B16D712AE9206D00613F39 /* retroSevenWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 51B16D642AE9206C00613F39 /* retroSevenWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		51B16D772AE9208400613F39 /* OAuthSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 51B16D762AE9208400613F39 /* OAuthSwift */; };
+		51B16D782AE920B300613F39 /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519F91EC2AE741F800DA8675 /* AuthViewModel.swift */; };
+		51B16D792AE9211600613F39 /* StravaData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519F91EB2AE741F700DA8675 /* StravaData.swift */; };
+		51B16D7A2AE9211A00613F39 /* StravaDataStructs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519F91ED2AE741F800DA8675 /* StravaDataStructs.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,7 +47,28 @@
 			remoteGlobalIDString = 519F916A2AE4412800DA8675;
 			remoteInfo = retroSeven;
 		};
+		51B16D6F2AE9206D00613F39 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 519F91632AE4412800DA8675 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 51B16D632AE9206C00613F39;
+			remoteInfo = retroSevenWidgetExtension;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		51B16D722AE9206D00613F39 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				51B16D712AE9206D00613F39 /* retroSevenWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		519F916B2AE4412800DA8675 /* retroSeven.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = retroSeven.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -57,6 +88,13 @@
 		519F91EB2AE741F700DA8675 /* StravaData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StravaData.swift; sourceTree = "<group>"; };
 		519F91EC2AE741F800DA8675 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
 		519F91ED2AE741F800DA8675 /* StravaDataStructs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StravaDataStructs.swift; sourceTree = "<group>"; };
+		51B16D642AE9206C00613F39 /* retroSevenWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = retroSevenWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		51B16D682AE9206C00613F39 /* retroSevenWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = retroSevenWidgetBundle.swift; sourceTree = "<group>"; };
+		51B16D6A2AE9206C00613F39 /* retroSevenWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = retroSevenWidget.swift; sourceTree = "<group>"; };
+		51B16D6C2AE9206D00613F39 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		51B16D6E2AE9206D00613F39 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		51B16D7B2AE9600000613F39 /* retroSeven.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = retroSeven.entitlements; sourceTree = "<group>"; };
+		51B16D7C2AE9601F00613F39 /* retroSevenWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = retroSevenWidgetExtension.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,15 +121,27 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		51B16D612AE9206C00613F39 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				51B16D662AE9206C00613F39 /* SwiftUI.framework in Frameworks */,
+				51B16D652AE9206C00613F39 /* WidgetKit.framework in Frameworks */,
+				51B16D772AE9208400613F39 /* OAuthSwift in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		519F91622AE4412800DA8675 = {
 			isa = PBXGroup;
 			children = (
+				51B16D7C2AE9601F00613F39 /* retroSevenWidgetExtension.entitlements */,
 				519F916D2AE4412800DA8675 /* retroSeven */,
 				519F917E2AE4412900DA8675 /* retroSevenTests */,
 				519F91882AE4412900DA8675 /* retroSevenUITests */,
+				51B16D672AE9206C00613F39 /* retroSevenWidget */,
 				519F91B42AE724BC00DA8675 /* Frameworks */,
 				519F916C2AE4412800DA8675 /* Products */,
 			);
@@ -103,6 +153,7 @@
 				519F916B2AE4412800DA8675 /* retroSeven.app */,
 				519F917B2AE4412900DA8675 /* retroSevenTests.xctest */,
 				519F91852AE4412900DA8675 /* retroSevenUITests.xctest */,
+				51B16D642AE9206C00613F39 /* retroSevenWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -110,6 +161,7 @@
 		519F916D2AE4412800DA8675 /* retroSeven */ = {
 			isa = PBXGroup;
 			children = (
+				51B16D7B2AE9600000613F39 /* retroSeven.entitlements */,
 				519F91A52AE46C4A00DA8675 /* Info.plist */,
 				519F916E2AE4412800DA8675 /* RetroSevenApp.swift */,
 				519F919A2AE442AF00DA8675 /* MainScreen.swift */,
@@ -157,6 +209,17 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		51B16D672AE9206C00613F39 /* retroSevenWidget */ = {
+			isa = PBXGroup;
+			children = (
+				51B16D682AE9206C00613F39 /* retroSevenWidgetBundle.swift */,
+				51B16D6A2AE9206C00613F39 /* retroSevenWidget.swift */,
+				51B16D6C2AE9206D00613F39 /* Assets.xcassets */,
+				51B16D6E2AE9206D00613F39 /* Info.plist */,
+			);
+			path = retroSevenWidget;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -167,10 +230,12 @@
 				519F91672AE4412800DA8675 /* Sources */,
 				519F91682AE4412800DA8675 /* Frameworks */,
 				519F91692AE4412800DA8675 /* Resources */,
+				51B16D722AE9206D00613F39 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				51B16D702AE9206D00613F39 /* PBXTargetDependency */,
 			);
 			name = retroSeven;
 			packageProductDependencies = (
@@ -217,6 +282,26 @@
 			productReference = 519F91852AE4412900DA8675 /* retroSevenUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		51B16D632AE9206C00613F39 /* retroSevenWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 51B16D752AE9206D00613F39 /* Build configuration list for PBXNativeTarget "retroSevenWidgetExtension" */;
+			buildPhases = (
+				51B16D602AE9206C00613F39 /* Sources */,
+				51B16D612AE9206C00613F39 /* Frameworks */,
+				51B16D622AE9206C00613F39 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = retroSevenWidgetExtension;
+			packageProductDependencies = (
+				51B16D762AE9208400613F39 /* OAuthSwift */,
+			);
+			productName = retroSevenWidgetExtension;
+			productReference = 51B16D642AE9206C00613F39 /* retroSevenWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -237,6 +322,9 @@
 					519F91842AE4412900DA8675 = {
 						CreatedOnToolsVersion = 15.0.1;
 						TestTargetID = 519F916A2AE4412800DA8675;
+					};
+					51B16D632AE9206C00613F39 = {
+						CreatedOnToolsVersion = 15.0.1;
 					};
 				};
 			};
@@ -260,6 +348,7 @@
 				519F916A2AE4412800DA8675 /* retroSeven */,
 				519F917A2AE4412900DA8675 /* retroSevenTests */,
 				519F91842AE4412900DA8675 /* retroSevenUITests */,
+				51B16D632AE9206C00613F39 /* retroSevenWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -285,6 +374,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		51B16D622AE9206C00613F39 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				51B16D6D2AE9206D00613F39 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -321,6 +418,18 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		51B16D602AE9206C00613F39 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				51B16D6B2AE9206C00613F39 /* retroSevenWidget.swift in Sources */,
+				51B16D692AE9206C00613F39 /* retroSevenWidgetBundle.swift in Sources */,
+				51B16D792AE9211600613F39 /* StravaData.swift in Sources */,
+				51B16D7A2AE9211A00613F39 /* StravaDataStructs.swift in Sources */,
+				51B16D782AE920B300613F39 /* AuthViewModel.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -333,6 +442,11 @@
 			isa = PBXTargetDependency;
 			target = 519F916A2AE4412800DA8675 /* retroSeven */;
 			targetProxy = 519F91862AE4412900DA8675 /* PBXContainerItemProxy */;
+		};
+		51B16D702AE9206D00613F39 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 51B16D632AE9206C00613F39 /* retroSevenWidgetExtension */;
+			targetProxy = 51B16D6F2AE9206D00613F39 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -469,8 +583,10 @@
 		519F91902AE4412900DA8675 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = retroSeven/retroSeven.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"retroSeven/Preview Content\"";
@@ -499,8 +615,10 @@
 		519F91912AE4412900DA8675 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = retroSeven/retroSeven.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"retroSeven/Preview Content\"";
@@ -602,6 +720,62 @@
 			};
 			name = Release;
 		};
+		51B16D732AE9206D00613F39 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = retroSevenWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = Z444QD4V5Z;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = retroSevenWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = retroSevenWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = conorsleith.retroSeven.retroSevenWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		51B16D742AE9206D00613F39 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = retroSevenWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = Z444QD4V5Z;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = retroSevenWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = retroSevenWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = conorsleith.retroSeven.retroSevenWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -641,6 +815,15 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		51B16D752AE9206D00613F39 /* Build configuration list for PBXNativeTarget "retroSevenWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				51B16D732AE9206D00613F39 /* Debug */,
+				51B16D742AE9206D00613F39 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
@@ -672,6 +855,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 519F91AA2AE4B69400DA8675 /* XCRemoteSwiftPackageReference "StravaSwift" */;
 			productName = StravaSwift;
+		};
+		51B16D762AE9208400613F39 /* OAuthSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 519F91A22AE469E600DA8675 /* XCRemoteSwiftPackageReference "OAuthSwift" */;
+			productName = OAuthSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
