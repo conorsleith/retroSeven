@@ -24,7 +24,7 @@ class StravaDataViewModel: ObservableObject {
     private var activities: [StravaActivity] = []
     private var cancellables: Set<AnyCancellable> = []
     private var requestStatus: RequestStatus?
-    private var shouldFakeToken = false
+    private var shouldFakeToken = true
     
     init () {
         print("Initializing StravaDataViewModel...")

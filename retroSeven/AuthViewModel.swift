@@ -102,6 +102,7 @@ class AuthViewModel: ObservableObject {
                 let updateQuery: [String: Any] = [
                     kSecClass as String: kSecClassGenericPassword,
                     kSecAttrService as String: service,
+                    kSecAttrSynchronizable as String: kSecAttrSynchronizableAny
                 ]
                 let updateAttributes: [String: Any] = [
                     kSecValueData as String: data
@@ -119,7 +120,8 @@ class AuthViewModel: ObservableObject {
                     kSecClass as String: kSecClassGenericPassword,
                     kSecAttrService as String: service,
                     kSecValueData as String: data,
-                    kSecAttrAccessible as String: kSecAttrAccessibleWhenUnlockedThisDeviceOnly
+                    kSecAttrAccessible as String: kSecAttrAccessibleWhenUnlockedThisDeviceOnly,
+                    kSecAttrSynchronizable as String: kSecAttrSynchronizableAny
                 ]
                 let status = SecItemAdd(addQuery as CFDictionary, nil)
                 
@@ -136,9 +138,9 @@ class AuthViewModel: ObservableObject {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: service,
-            kSecReturnData as String: kCFBooleanTrue as CFBoolean
+            kSecReturnData as String: kCFBooleanTrue as CFBoolean,
+            kSecAttrSynchronizable as String: kSecAttrSynchronizableAny
         ]
-
         var result: AnyObject?
         let status = SecItemCopyMatching(query as CFDictionary, &result)
 

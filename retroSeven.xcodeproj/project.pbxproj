@@ -35,6 +35,10 @@
 		51B16DB62AEAE1EC00613F39 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 51B16DB52AEAE1EC00613F39 /* Assets.xcassets */; };
 		51B16DB92AEAE1EC00613F39 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 51B16DB82AEAE1EC00613F39 /* Preview Assets.xcassets */; };
 		51B16DBC2AEAE1EC00613F39 /* retroSevenWatch Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 51B16DAF2AEAE1EB00613F39 /* retroSevenWatch Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		51B16DC22AEAE26700613F39 /* OAuthSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 51B16DC12AEAE26700613F39 /* OAuthSwift */; };
+		51B16DC42AEAE28100613F39 /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519F91EC2AE741F800DA8675 /* AuthViewModel.swift */; };
+		51B16DC52AEAE28A00613F39 /* StravaData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519F91EB2AE741F700DA8675 /* StravaData.swift */; };
+		51B16DC72AEAE32D00613F39 /* StravaDataStructs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519F91ED2AE741F800DA8675 /* StravaDataStructs.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -123,6 +127,7 @@
 		51B16DB32AEAE1EB00613F39 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		51B16DB52AEAE1EC00613F39 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		51B16DB82AEAE1EC00613F39 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		51B16DC82AEAE4AA00613F39 /* retroSevenWatch Watch App.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "retroSevenWatch Watch App.entitlements"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -163,6 +168,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				51B16DC22AEAE26700613F39 /* OAuthSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -260,6 +266,7 @@
 		51B16DB02AEAE1EB00613F39 /* retroSevenWatch Watch App */ = {
 			isa = PBXGroup;
 			children = (
+				51B16DC82AEAE4AA00613F39 /* retroSevenWatch Watch App.entitlements */,
 				51B16DB12AEAE1EB00613F39 /* retroSevenWatchApp.swift */,
 				51B16DB32AEAE1EB00613F39 /* ContentView.swift */,
 				51B16DB52AEAE1EC00613F39 /* Assets.xcassets */,
@@ -373,6 +380,9 @@
 			dependencies = (
 			);
 			name = "retroSevenWatch Watch App";
+			packageProductDependencies = (
+				51B16DC12AEAE26700613F39 /* OAuthSwift */,
+			);
 			productName = "retroSevenWatch Watch App";
 			productReference = 51B16DAF2AEAE1EB00613F39 /* retroSevenWatch Watch App.app */;
 			productType = "com.apple.product-type.application";
@@ -522,6 +532,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				51B16DC42AEAE28100613F39 /* AuthViewModel.swift in Sources */,
+				51B16DC52AEAE28A00613F39 /* StravaData.swift in Sources */,
+				51B16DC72AEAE32D00613F39 /* StravaDataStructs.swift in Sources */,
 				51B16DB42AEAE1EB00613F39 /* ContentView.swift in Sources */,
 				51B16DB22AEAE1EB00613F39 /* retroSevenWatchApp.swift in Sources */,
 			);
@@ -883,6 +896,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "retroSevenWatch Watch App/retroSevenWatch Watch App.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"retroSevenWatch Watch App/Preview Content\"";
@@ -913,6 +927,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "retroSevenWatch Watch App/retroSevenWatch Watch App.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"retroSevenWatch Watch App/Preview Content\"";
@@ -1028,6 +1043,11 @@
 			productName = StravaSwift;
 		};
 		51B16D762AE9208400613F39 /* OAuthSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 519F91A22AE469E600DA8675 /* XCRemoteSwiftPackageReference "OAuthSwift" */;
+			productName = OAuthSwift;
+		};
+		51B16DC12AEAE26700613F39 /* OAuthSwift */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 519F91A22AE469E600DA8675 /* XCRemoteSwiftPackageReference "OAuthSwift" */;
 			productName = OAuthSwift;
