@@ -9,30 +9,39 @@ import WidgetKit
 import SwiftUI
 
 struct Provider: TimelineProvider {
-    func placeholder(in context: Context) -> SimpleEntry {
-        SimpleEntry(date: Date(), emoji: "😀")
+    private var stravaData: StravaDataViewModel = StravaDataViewModel()
+
+    func placeholder(in context: Context) -> MileageEntry {
+        print("placeholder")
+        return MileageEntry(date: Date(), currentMileage: 420, expiringMileage: 69)
     }
 
-    func getSnapshot(in context: Context, completion: @escaping (SimpleEntry) -> ()) {
-        let entry = SimpleEntry(date: Date(), emoji: "😀")
+    func getSnapshot(in context: Context, completion: @escaping (MileageEntry) -> ()) {
+        print("getSnapshot")
+        let entry = MileageEntry(date: Date(), currentMileage: 420, expiringMileage: 69)
         completion(entry)
     }
 
-    func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
-        var entries: [SimpleEntry] = []
-
+    func getTimeline(in context: Context, completion: @escaping (Timeline<MileageEntry>) -> ()) {
+        print("getTimeline")
         // Generate a timeline consisting of five entries an hour apart, starting from the current date.
         let currentDate = Date()
-        for hourOffset in 0 ..< 2 {
-            print(hourOffset)
-            let entryDate = Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate)!
-            let entry = SimpleEntry(date: entryDate, emoji: "😀")
-            entries.append(entry)
+        let nextUpdateDate = Calendar.current.date(byAdding: .minute, value: 10, to: currentDate)!
+        Task{
+            await stravaData.fetchStravaActivities()
+            let entry = MileageEntry(date: currentDate, currentMileage: stravaData.currentMileage, expiringMileage: stravaData.expiringMileage)
+            
+            print(stravaData.currentMileage, stravaData.expiringMileage)
+            let timeline = Timeline(entries: [entry], policy: .after(nextUpdateDate))
+            completion(timeline)
         }
-
-        let timeline = Timeline(entries: entries, policy: .atEnd)
-        completion(timeline)
     }
+}
+
+struct MileageEntry: TimelineEntry {
+    let date: Date
+    let currentMileage: Int
+    let expiringMileage: Int
 }
 
 struct SimpleEntry: TimelineEntry {
@@ -41,54 +50,37 @@ struct SimpleEntry: TimelineEntry {
 }
 
 struct retroSevenWidgetEntryView : View {
-    @StateObject var stravaData: StravaDataViewModel = StravaDataViewModel()
     var entry: Provider.Entry
 
     var body: some View {
         VStack {
-            Button("Refresh Strava Data") {
-                stravaData.fetchStravaActivities()
-            }
-//            HStack {
-//                Text("\(stravaData.currentMileage > 0 ? "\(stravaData.currentMileage)" : "")")
-//                    .foregroundColor(Color(red: 0.98, green: 0.32, blue: 0.01)) // Strava orange color
-//                Text("\(stravaData.expiringMileage > 0 ? "\(stravaData.expiringMileage)" : "")")
-//                    .foregroundColor(Color.gray) // Grey color
-//            }
+
             HStack {
-                Text("\(stravaData.currentMileage)")
+                Text("\(entry.currentMileage)")
                     .foregroundColor(Color(red: 0.98, green: 0.32, blue: 0.01)) // Strava orange color
-                Text("\(stravaData.expiringMileage)")
+                Text("\(entry.expiringMileage)")
                     .foregroundColor(Color.gray) // Grey color
             }
-//            .font(.largeTitle)
+            .font(.largeTitle)
             .padding()
-        }
-        .onAppear {
-            //stravaData.fetchStravaActivities()
-////            Timer.scheduledTimer(withTimeInterval: 300, repeats: true) { timer in
-////                stravaData.fetchStravaActivities()
-////            }
-        }
-        .onReceive(stravaData.$currentMileage) { newCurrentMileage in
-            // Handle changes to the first derived number
-            print("First Number changed to: \(newCurrentMileage)")
-        }
-        .onReceive(stravaData.$expiringMileage) { newExpiringMileage in
-            // Handle changes to the second derived number
-            print("Second Number changed to: \(newExpiringMileage)")
         }
     }
 }
 
 struct retroSevenWidget: Widget {
     let kind: String = "retroSevenWidget"
-
+    @ObservedObject var authViewModel = AuthViewModel()
+    
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: Provider()) { entry in
-            retroSevenWidgetEntryView(entry: entry)
-                .padding()
-                .background()
+            if #available(iOS 17.0, *) {
+                retroSevenWidgetEntryView(entry: entry)
+                    .containerBackground(.fill.tertiary, for: .widget)
+            } else {
+                retroSevenWidgetEntryView(entry: entry)
+                    .padding()
+                    .background()
+            }
         }
         .configurationDisplayName("My Widget")
         .description("This is an example widget.")

@@ -19,8 +19,8 @@ class StravaDataViewModel: ObservableObject {
     @Published var currentMileage: Int = 0
     @Published var expiringMileage: Int = 0
     @Published var needsRefresh = false
-    @Published var isLoading: Bool = false
-    @Published var error: Error?
+    var isLoading: Bool = false
+    var error: Error?
     private var activities: [StravaActivity] = []
     private var cancellables: Set<AnyCancellable> = []
     private var requestStatus: RequestStatus?
@@ -30,21 +30,14 @@ class StravaDataViewModel: ObservableObject {
         print("Initializing StravaDataViewModel...")
     }
 
-    func retrieveToken() -> String? {
-        if let tokenResponse = AuthViewModel.retrieveTokenFromKeychain(service: keyChainTokenService) {
-            return tokenResponse
-        }
-        return nil
-    }
-    
-    func fetchStravaActivities() {
+    func fetchStravaActivities() async {
         // Set isLoading to true to show a loading indicator in your view.
         print("Loading strava data...")
         isLoading = true
         
         // get the access token from the keychain
         var accessToken: String = ""
-        if let tokenResponse = retrieveToken() {
+        if let tokenResponse = StravaDataViewModel.retrieveToken() {
             if (self.shouldFakeToken) {
                 accessToken = "foo"
                 self.shouldFakeToken = false
@@ -57,13 +50,53 @@ class StravaDataViewModel: ObservableObject {
             print("Couldn't authorize")
             return
         }
-        
-        // Build the request URL
+
+        // Make the API call and process
+        if let url = buildURL() {
+            await makeFetchCall(url: url, accessToken: accessToken)
+        }
+    }
+
+    func makeFetchCall(url: URL, accessToken: String) async {
+        print("Running makeFetchCall with token: \(accessToken)")
+        self.requestStatus = RequestStatus.Starting
+        var request = URLRequest(url: url)
+        request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+
+        do {
+            let (data, _) = try await URLSession.shared.data(for: request)
+            if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
+                                                let message = json["message"] as? String,
+                                                message == "Authorization Error" {
+                self.requestStatus = RequestStatus.AuthFailure
+                DispatchQueue.main.async {
+                    self.needsRefresh = true
+                }
+            } else {
+                let activities = try JSONDecoder().decode([StravaActivity].self, from: data)
+                self.activities = activities
+                let (currentMileage, expiringMileage) = StravaDataViewModel.calculateMiles(activities: activities)
+                DispatchQueue.main.async {
+                    self.currentMileage = currentMileage
+                    self.expiringMileage = expiringMileage
+                }
+                self.requestStatus = RequestStatus.Success
+            }
+        } catch {
+            self.isLoading = false
+            self.error = error
+            self.requestStatus = RequestStatus.DecodeFailure
+            print("Caught an error")
+            print(error)
+        }
+    }
+
+    func buildURL() -> URL? {
         let apiUrl = "https://www.strava.com/api/v3/athlete/activities"
         guard let baseURL = URL(string: apiUrl) else {
             isLoading = false
             error = URLError(URLError.badURL)
-            return
+            return nil
         }
         var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: true)
         let before = round(Date().timeIntervalSince1970)
@@ -75,63 +108,19 @@ class StravaDataViewModel: ObservableObject {
             URLQueryItem(name: "per_dpage", value: "28")
         ]
         components?.queryItems = parameters
-        
-        // Make the API call and process
         if let url = components?.url {
-            makeFetchCall(url: url, accessToken: accessToken)
+            return url
         }
+        return nil
     }
-
-    func makeFetchCall(url: URL, accessToken: String) {
-        print("Running makeFetchCall with token: \(accessToken)")
-        self.requestStatus = RequestStatus.Starting
-        var request = URLRequest(url: url)
-        request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
-//        debugPrintRequest(request: request)
-        
-        URLSession.shared.dataTaskPublisher(for: request)
-            .receive(on: DispatchQueue.main)
-            .map(\.data)
-//            .print("API Request Debug:")
-            .sink(receiveCompletion: { result in
-                switch result {
-                case .finished:
-                    break
-                case .failure(let error):
-                    self.isLoading = false
-                    self.error = error
-                    print("Failure!")
-                }
-            }, receiveValue: { data in
-            dataProcess: do {
-                    // Let's check and see if it's an auth failure
-                    if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] {
-                        if let message = json["message"] as? String {
-                            if message == "Authorization Error" {
-                                self.requestStatus = RequestStatus.AuthFailure
-                                self.needsRefresh = true
-                                break dataProcess
-                            }
-                        }
-                    }
-                    let activities = try JSONDecoder().decode([StravaActivity].self, from: data)
-                    self.activities = activities
-                    let (currentMileage, expiringMileage) = StravaDataViewModel.calculateMiles(activities: activities)
-                    self.currentMileage = currentMileage
-                    self.expiringMileage = expiringMileage
-                    self.requestStatus = RequestStatus.Success
-                } catch {
-                    // Handle decoding errors
-                    self.isLoading = false
-                    self.error = error
-                    self.requestStatus = RequestStatus.DecodeFailure
-                    print("Caught an error")
-                    print(error)
-                }
-            })
-            .store(in: &cancellables)
+    
+    static func retrieveToken() -> String? {
+        if let tokenResponse = AuthViewModel.retrieveTokenFromKeychain(service: keyChainTokenService) {
+            return tokenResponse
+        }
+        return nil
     }
-
+    
     static func epochTimestampForOneWeekAgoMidnight() -> TimeInterval {
         let calendar = Calendar.current
         let currentDate = Date()

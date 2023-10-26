@@ -26,15 +26,18 @@ struct RetroSeven: App {
                 MainScreen()
                     .environmentObject(authViewModel)
                     .environmentObject(stravaData)
-                    .onReceive(authViewModel.$refreshTrigger) { newValue in
-                        if (newValue){
-                            stravaData.fetchStravaActivities()
-                            authViewModel.refreshTrigger = false
+                    .onReceive(stravaData.$needsRefresh) { needsRefresh in
+                        if (needsRefresh){
+                            authViewModel.refresh()
+                            stravaData.needsRefresh = false
                         }
                     }
-                    .onReceive(stravaData.$needsRefresh) { newValue in
-                        if (newValue){
-                            authViewModel.refresh()
+                    .onReceive(authViewModel.$refreshTrigger) { triggerState in
+                        if (triggerState){
+                            Task {
+                                await stravaData.fetchStravaActivities()
+                                authViewModel.refreshTrigger = false
+                            }
                         }
                     }
             } else {

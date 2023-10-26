@@ -53,7 +53,9 @@ class AuthViewModel: ObservableObject {
                     accessToken = credential.oauthToken
                     AuthViewModel.saveTokenToKeychain(token: credential.oauthToken, service: keyChainTokenService)
                     AuthViewModel.saveTokenToKeychain(token: credential.oauthRefreshToken, service: keyChainRefreshService)
-                    self.refreshTrigger = true
+                    DispatchQueue.main.async {
+                        self.refreshTrigger = true
+                    }
                 case .failure(let error):
                     // Handle the error, e.g., refresh token expiration or network issues
                     print("Token Renewal Error: \(error.localizedDescription)")
