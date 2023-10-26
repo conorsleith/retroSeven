@@ -7,9 +7,13 @@
 
 import WidgetKit
 import SwiftUI
+import Foundation
+import Combine
 
 struct Provider: TimelineProvider {
     private var stravaData: StravaDataViewModel = StravaDataViewModel()
+    @ObservedObject var auth: AuthViewModel = AuthViewModel()
+    private var cancellables = Set<AnyCancellable>()
 
     func placeholder(in context: Context) -> MileageEntry {
         print("placeholder")
@@ -24,16 +28,16 @@ struct Provider: TimelineProvider {
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<MileageEntry>) -> ()) {
         print("getTimeline")
-        // Generate a timeline consisting of five entries an hour apart, starting from the current date.
-        let currentDate = Date()
-        let nextUpdateDate = Calendar.current.date(byAdding: .minute, value: 10, to: currentDate)!
-        Task{
-            await stravaData.fetchStravaActivities()
-            let entry = MileageEntry(date: currentDate, currentMileage: stravaData.currentMileage, expiringMileage: stravaData.expiringMileage)
-            
-            print(stravaData.currentMileage, stravaData.expiringMileage)
-            let timeline = Timeline(entries: [entry], policy: .after(nextUpdateDate))
-            completion(timeline)
+        let nextUpdateDate = Calendar.current.date(byAdding: .minute, value: 10, to: Date())!
+        auth.refresh { result in
+            Task{
+                var currentMileage: Int
+                var expiringMileage: Int
+                (currentMileage, expiringMileage) = await stravaData.fetchStravaActivities()
+                let entry = MileageEntry(date: Date(), currentMileage: currentMileage, expiringMileage: expiringMileage)
+                let timeline = Timeline(entries: [entry], policy: .after(nextUpdateDate))
+                completion(timeline)
+            }
         }
     }
 }

@@ -28,8 +28,11 @@ struct RetroSeven: App {
                     .environmentObject(stravaData)
                     .onReceive(stravaData.$needsRefresh) { needsRefresh in
                         if (needsRefresh){
-                            authViewModel.refresh()
-                            stravaData.needsRefresh = false
+                            authViewModel.refresh { success in
+                                if (success) {
+                                    stravaData.needsRefresh = false
+                                }
+                            }
                         }
                     }
                     .onReceive(authViewModel.$refreshTrigger) { triggerState in

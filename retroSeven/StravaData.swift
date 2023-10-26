@@ -30,7 +30,7 @@ class StravaDataViewModel: ObservableObject {
         print("Initializing StravaDataViewModel...")
     }
 
-    func fetchStravaActivities() async {
+    func fetchStravaActivities() async -> (Int, Int) {
         // Set isLoading to true to show a loading indicator in your view.
         print("Loading strava data...")
         isLoading = true
@@ -48,16 +48,17 @@ class StravaDataViewModel: ObservableObject {
             // we really shouldn't be here because we're supposed to do
             // the first authorization before entering MainScreen
             print("Couldn't authorize")
-            return
+            return (-1, -1)
         }
 
         // Make the API call and process
         if let url = buildURL() {
-            await makeFetchCall(url: url, accessToken: accessToken)
+            return await makeFetchCall(url: url, accessToken: accessToken)
         }
+        return (-1, -1)
     }
 
-    func makeFetchCall(url: URL, accessToken: String) async {
+    func makeFetchCall(url: URL, accessToken: String) async -> (Int, Int){
         print("Running makeFetchCall with token: \(accessToken)")
         self.requestStatus = RequestStatus.Starting
         var request = URLRequest(url: url)
@@ -81,6 +82,7 @@ class StravaDataViewModel: ObservableObject {
                     self.expiringMileage = expiringMileage
                 }
                 self.requestStatus = RequestStatus.Success
+                return (currentMileage, expiringMileage)
             }
         } catch {
             self.isLoading = false
@@ -89,6 +91,7 @@ class StravaDataViewModel: ObservableObject {
             print("Caught an error")
             print(error)
         }
+        return (-1, -1)
     }
 
     func buildURL() -> URL? {

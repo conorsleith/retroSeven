@@ -41,7 +41,7 @@ class AuthViewModel: ObservableObject {
         }
     }
     
-    func refresh() -> String? {
+    func refresh(completion: @escaping (Bool) -> Void) -> String? {
         var accessToken = ""
         if let refreshToken = AuthViewModel.retrieveTokenFromKeychain(service: keyChainRefreshService) {
             self.oauthswift.renewAccessToken(withRefreshToken: refreshToken) { result in
@@ -50,15 +50,19 @@ class AuthViewModel: ObservableObject {
                     // Handle the successful token renewal here
                     // The new access token is available in 'credential.oauthToken'
                     print("Access Token Renewed: \(credential.oauthToken)")
+                    print(parameters)
+                    print(response)
                     accessToken = credential.oauthToken
                     AuthViewModel.saveTokenToKeychain(token: credential.oauthToken, service: keyChainTokenService)
                     AuthViewModel.saveTokenToKeychain(token: credential.oauthRefreshToken, service: keyChainRefreshService)
                     DispatchQueue.main.async {
                         self.refreshTrigger = true
                     }
+                    completion(true)
                 case .failure(let error):
                     // Handle the error, e.g., refresh token expiration or network issues
                     print("Token Renewal Error: \(error.localizedDescription)")
+                    completion(false)
                 }
             }
         }
