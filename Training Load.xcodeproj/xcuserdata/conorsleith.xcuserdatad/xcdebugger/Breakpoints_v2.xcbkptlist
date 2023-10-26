@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "713096D0-6BAC-41AB-A007-A710233902FB"
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "740F316A-C063-45F2-A503-A9901D6FA06E"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "retroSeven/AuthViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "45"
+            endingLineNumber = "45"
+            landmarkName = "refresh(completion:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "740F316A-C063-45F2-A503-A9901D6FA06E - f5443365caa1d9f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "retroSeven.AuthViewModel.refresh() -&gt; Swift.Optional&lt;Swift.String&gt;"
+                  moduleName = "retroSeven"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/conorsleith/Documents/Xcode%20Projects/retroSeven/retroSeven/AuthViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "41"
+                  endingLineNumber = "41"
+                  offsetFromSymbolStart = "140">
+               </Location>
+               <Location
+                  uuid = "740F316A-C063-45F2-A503-A9901D6FA06E - 33007938f2075145"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Result&lt;(credential: OAuthSwift.OAuthSwiftCredential, response: Swift.Optional&lt;OAuthSwift.OAuthSwiftResponse&gt;, parameters: Swift.Dictionary&lt;Swift.String, Any&gt;), OAuthSwift.OAuthSwiftError&gt;) -&gt; () in retroSeven.AuthViewModel.refresh() -&gt; Swift.Optional&lt;Swift.String&gt;"
+                  moduleName = "retroSeven"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/conorsleith/Documents/Xcode%20Projects/retroSeven/retroSeven/AuthViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "41"
+                  endingLineNumber = "41"
+                  offsetFromSymbolStart = "268">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "3B32525B-31B9-432B-841D-53602827F05A"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "retroSeven/AuthViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "59"
+            endingLineNumber = "59"
+            landmarkName = "refresh(completion:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "3B32525B-31B9-432B-841D-53602827F05A - 33007938f207507c"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Result&lt;(credential: OAuthSwift.OAuthSwiftCredential, response: Swift.Optional&lt;OAuthSwift.OAuthSwiftResponse&gt;, parameters: Swift.Dictionary&lt;Swift.String, Any&gt;), OAuthSwift.OAuthSwiftError&gt;) -&gt; () in retroSeven.AuthViewModel.refresh() -&gt; Swift.Optional&lt;Swift.String&gt;"
+                  moduleName = "retroSeven"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/conorsleith/Documents/Xcode%20Projects/retroSeven/retroSeven/AuthViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "48"
+                  endingLineNumber = "48"
+                  offsetFromSymbolStart = "460">
+               </Location>
+               <Location
+                  uuid = "3B32525B-31B9-432B-841D-53602827F05A - 33007938f207505d"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Result&lt;(credential: OAuthSwift.OAuthSwiftCredential, response: Swift.Optional&lt;OAuthSwift.OAuthSwiftResponse&gt;, parameters: Swift.Dictionary&lt;Swift.String, Any&gt;), OAuthSwift.OAuthSwiftError&gt;) -&gt; () in retroSeven.AuthViewModel.refresh() -&gt; Swift.Optional&lt;Swift.String&gt;"
+                  moduleName = "retroSeven"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/conorsleith/Documents/Xcode%20Projects/retroSeven/retroSeven/AuthViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "49"
+                  endingLineNumber = "49"
+                  offsetFromSymbolStart = "460">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F5BCCDAE-B2E2-4B8A-9F62-13703F73E61D"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "retroSeven/AuthViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "136"
+            endingLineNumber = "136"
+            landmarkName = "retrieveTokenFromKeychain(service:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "3DBD260E-6642-43AA-9E53-5BCCAEAF7CCF"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "retroSeven/StravaData.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "30"
+            endingLineNumber = "30"
+            landmarkName = "init()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "AB92680F-7604-42FA-8492-78DB886AB3B2"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "retroSeven/MainScreen.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "20"
+            endingLineNumber = "20"
+            landmarkName = "body"
+            landmarkType = "24">
+            <Locations>
+               <Location
+                  uuid = "AB92680F-7604-42FA-8492-78DB886AB3B2 - c50d8215f78683"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; () in closure #1 () -&gt; SwiftUI.TupleView&lt;(SwiftUI.Button&lt;SwiftUI.Text&gt;, &lt;&lt;opaque return type of SwiftUI.View.padding(SwiftUI.Edge.Set, Swift.Optional&lt;CoreGraphics.CGFloat&gt;) -&gt; some&gt;&gt;.0)&gt; in retroSeven.MainScreen.body.getter : some"
+                  moduleName = "retroSeven"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/conorsleith/Documents/Xcode%20Projects/retroSeven/retroSeven/MainScreen.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "17"
+                  endingLineNumber = "17"
+                  offsetFromSymbolStart = "196">
+               </Location>
+               <Location
+                  uuid = "AB92680F-7604-42FA-8492-78DB886AB3B2 - 6dd00e2e90f2aab5"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 @Swift.MainActor () -&gt; () in closure #1 () -&gt; () in closure #1 () -&gt; SwiftUI.TupleView&lt;(SwiftUI.Button&lt;SwiftUI.Text&gt;, &lt;&lt;opaque return type of SwiftUI.View.padding(SwiftUI.Edge.Set, Swift.Optional&lt;CoreGraphics.CGFloat&gt;) -&gt; some&gt;&gt;.0)&gt; in retroSeven.MainScreen.body.getter : some"
+                  moduleName = "retroSeven"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/conorsleith/Documents/Xcode%20Projects/retroSeven/retroSeven/MainScreen.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "18"
+                  endingLineNumber = "18"
+                  offsetFromSymbolStart = "124">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>
