@@ -30,6 +30,11 @@
 		51B16D782AE920B300613F39 /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519F91EC2AE741F800DA8675 /* AuthViewModel.swift */; };
 		51B16D792AE9211600613F39 /* StravaData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519F91EB2AE741F700DA8675 /* StravaData.swift */; };
 		51B16D7A2AE9211A00613F39 /* StravaDataStructs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519F91ED2AE741F800DA8675 /* StravaDataStructs.swift */; };
+		51B16DB22AEAE1EB00613F39 /* retroSevenWatchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B16DB12AEAE1EB00613F39 /* retroSevenWatchApp.swift */; };
+		51B16DB42AEAE1EB00613F39 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B16DB32AEAE1EB00613F39 /* ContentView.swift */; };
+		51B16DB62AEAE1EC00613F39 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 51B16DB52AEAE1EC00613F39 /* Assets.xcassets */; };
+		51B16DB92AEAE1EC00613F39 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 51B16DB82AEAE1EC00613F39 /* Preview Assets.xcassets */; };
+		51B16DBC2AEAE1EC00613F39 /* retroSevenWatch Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 51B16DAF2AEAE1EB00613F39 /* retroSevenWatch Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +59,13 @@
 			remoteGlobalIDString = 51B16D632AE9206C00613F39;
 			remoteInfo = retroSevenWidgetExtension;
 		};
+		51B16DBA2AEAE1EC00613F39 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 519F91632AE4412800DA8675 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 51B16DAE2AEAE1EB00613F39;
+			remoteInfo = "retroSevenWatch Watch App";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -66,6 +78,17 @@
 				51B16D712AE9206D00613F39 /* retroSevenWidgetExtension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		51B16DBD2AEAE1EC00613F39 /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				51B16DBC2AEAE1EC00613F39 /* retroSevenWatch Watch App.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -95,6 +118,11 @@
 		51B16D6E2AE9206D00613F39 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		51B16D7B2AE9600000613F39 /* retroSeven.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = retroSeven.entitlements; sourceTree = "<group>"; };
 		51B16D7C2AE9601F00613F39 /* retroSevenWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = retroSevenWidgetExtension.entitlements; sourceTree = "<group>"; };
+		51B16DAF2AEAE1EB00613F39 /* retroSevenWatch Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "retroSevenWatch Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		51B16DB12AEAE1EB00613F39 /* retroSevenWatchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = retroSevenWatchApp.swift; sourceTree = "<group>"; };
+		51B16DB32AEAE1EB00613F39 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		51B16DB52AEAE1EC00613F39 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		51B16DB82AEAE1EC00613F39 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,6 +159,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		51B16DAC2AEAE1EB00613F39 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -142,6 +177,7 @@
 				519F917E2AE4412900DA8675 /* retroSevenTests */,
 				519F91882AE4412900DA8675 /* retroSevenUITests */,
 				51B16D672AE9206C00613F39 /* retroSevenWidget */,
+				51B16DB02AEAE1EB00613F39 /* retroSevenWatch Watch App */,
 				519F91B42AE724BC00DA8675 /* Frameworks */,
 				519F916C2AE4412800DA8675 /* Products */,
 			);
@@ -154,6 +190,7 @@
 				519F917B2AE4412900DA8675 /* retroSevenTests.xctest */,
 				519F91852AE4412900DA8675 /* retroSevenUITests.xctest */,
 				51B16D642AE9206C00613F39 /* retroSevenWidgetExtension.appex */,
+				51B16DAF2AEAE1EB00613F39 /* retroSevenWatch Watch App.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -220,6 +257,25 @@
 			path = retroSevenWidget;
 			sourceTree = "<group>";
 		};
+		51B16DB02AEAE1EB00613F39 /* retroSevenWatch Watch App */ = {
+			isa = PBXGroup;
+			children = (
+				51B16DB12AEAE1EB00613F39 /* retroSevenWatchApp.swift */,
+				51B16DB32AEAE1EB00613F39 /* ContentView.swift */,
+				51B16DB52AEAE1EC00613F39 /* Assets.xcassets */,
+				51B16DB72AEAE1EC00613F39 /* Preview Content */,
+			);
+			path = "retroSevenWatch Watch App";
+			sourceTree = "<group>";
+		};
+		51B16DB72AEAE1EC00613F39 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				51B16DB82AEAE1EC00613F39 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -231,11 +287,13 @@
 				519F91682AE4412800DA8675 /* Frameworks */,
 				519F91692AE4412800DA8675 /* Resources */,
 				51B16D722AE9206D00613F39 /* Embed Foundation Extensions */,
+				51B16DBD2AEAE1EC00613F39 /* Embed Watch Content */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				51B16D702AE9206D00613F39 /* PBXTargetDependency */,
+				51B16DBB2AEAE1EC00613F39 /* PBXTargetDependency */,
 			);
 			name = retroSeven;
 			packageProductDependencies = (
@@ -302,6 +360,23 @@
 			productReference = 51B16D642AE9206C00613F39 /* retroSevenWidgetExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
+		51B16DAE2AEAE1EB00613F39 /* retroSevenWatch Watch App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 51B16DC02AEAE1EC00613F39 /* Build configuration list for PBXNativeTarget "retroSevenWatch Watch App" */;
+			buildPhases = (
+				51B16DAB2AEAE1EB00613F39 /* Sources */,
+				51B16DAC2AEAE1EB00613F39 /* Frameworks */,
+				51B16DAD2AEAE1EB00613F39 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "retroSevenWatch Watch App";
+			productName = "retroSevenWatch Watch App";
+			productReference = 51B16DAF2AEAE1EB00613F39 /* retroSevenWatch Watch App.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -324,6 +399,9 @@
 						TestTargetID = 519F916A2AE4412800DA8675;
 					};
 					51B16D632AE9206C00613F39 = {
+						CreatedOnToolsVersion = 15.0.1;
+					};
+					51B16DAE2AEAE1EB00613F39 = {
 						CreatedOnToolsVersion = 15.0.1;
 					};
 				};
@@ -349,6 +427,7 @@
 				519F917A2AE4412900DA8675 /* retroSevenTests */,
 				519F91842AE4412900DA8675 /* retroSevenUITests */,
 				51B16D632AE9206C00613F39 /* retroSevenWidgetExtension */,
+				51B16DAE2AEAE1EB00613F39 /* retroSevenWatch Watch App */,
 			);
 		};
 /* End PBXProject section */
@@ -382,6 +461,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				51B16D6D2AE9206D00613F39 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		51B16DAD2AEAE1EB00613F39 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				51B16DB92AEAE1EC00613F39 /* Preview Assets.xcassets in Resources */,
+				51B16DB62AEAE1EC00613F39 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -430,6 +518,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		51B16DAB2AEAE1EB00613F39 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				51B16DB42AEAE1EB00613F39 /* ContentView.swift in Sources */,
+				51B16DB22AEAE1EB00613F39 /* retroSevenWatchApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -447,6 +544,11 @@
 			isa = PBXTargetDependency;
 			target = 51B16D632AE9206C00613F39 /* retroSevenWidgetExtension */;
 			targetProxy = 51B16D6F2AE9206D00613F39 /* PBXContainerItemProxy */;
+		};
+		51B16DBB2AEAE1EC00613F39 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 51B16DAE2AEAE1EB00613F39 /* retroSevenWatch Watch App */;
+			targetProxy = 51B16DBA2AEAE1EC00613F39 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -776,6 +878,66 @@
 			};
 			name = Release;
 		};
+		51B16DBE2AEAE1EC00613F39 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"retroSevenWatch Watch App/Preview Content\"";
+				DEVELOPMENT_TEAM = Z444QD4V5Z;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = retroSevenWatch;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = conorsleith.retroSeven;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = conorsleith.retroSeven.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Debug;
+		};
+		51B16DBF2AEAE1EC00613F39 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"retroSevenWatch Watch App/Preview Content\"";
+				DEVELOPMENT_TEAM = Z444QD4V5Z;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = retroSevenWatch;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = conorsleith.retroSeven;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = conorsleith.retroSeven.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -820,6 +982,15 @@
 			buildConfigurations = (
 				51B16D732AE9206D00613F39 /* Debug */,
 				51B16D742AE9206D00613F39 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		51B16DC02AEAE1EC00613F39 /* Build configuration list for PBXNativeTarget "retroSevenWatch Watch App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				51B16DBE2AEAE1EC00613F39 /* Debug */,
+				51B16DBF2AEAE1EC00613F39 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
