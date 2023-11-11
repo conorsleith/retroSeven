@@ -8,6 +8,8 @@
 import Foundation
 import Combine
 
+let SECONDS_IN_DAY: Double = 60 * 60 * 24
+
 enum RequestStatus {
     case Success
     case AuthFailure
@@ -19,13 +21,18 @@ class StravaDataViewModel: ObservableObject {
     @Published var currentMileage: Int = 0
     @Published var expiringMileage: Int = 0
     @Published var needsRefresh = false
-    var isLoading: Bool = false
-    var error: Error?
+    
+    private let queryBeforeSeconds = round(Date().timeIntervalSince1970)
+    private let queryAfterSeconds = StravaDataViewModel.epochTimestampForOneWeekAgoMidnight() + SECONDS_IN_DAY
+
     private var activities: [StravaActivity] = []
     private var cancellables: Set<AnyCancellable> = []
     private var requestStatus: RequestStatus?
     private var shouldFakeToken = true
     
+    var isLoading: Bool = false
+    var error: Error?
+
     init () {
         print("Initializing StravaDataViewModel...")
     }
@@ -102,11 +109,9 @@ class StravaDataViewModel: ObservableObject {
             return nil
         }
         var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: true)
-        let before = round(Date().timeIntervalSince1970)
-        let after = StravaDataViewModel.epochTimestampForOneWeekAgoMidnight()
         let parameters: [URLQueryItem] = [
-            URLQueryItem(name: "before", value: String(format: "%.0f", before)),
-            URLQueryItem(name: "after", value: String(format: "%.0f", after)),
+            URLQueryItem(name: "before", value: String(format: "%.0f", self.queryBeforeSeconds)),
+            URLQueryItem(name: "after", value: String(format: "%.0f", self.queryAfterSeconds)),
             URLQueryItem(name: "page", value: "1"),
             URLQueryItem(name: "per_dpage", value: "28")
         ]
@@ -145,19 +150,28 @@ class StravaDataViewModel: ObservableObject {
         }
         return TimeInterval() // Return nil if there was an error
     }
-
-    static func isDateInOneWeekInterval(_ date: Date) -> Bool {
+    
+    static func todayEndpoints() -> (Date, Date) {
         let calendar = Calendar.current
         let currentDate = Date()
-
-        // Calculate the start of today at 12:00 AM
         let startOfToday = calendar.startOfDay(for: currentDate)
-        if let endOfToday = calendar.date(byAdding: .day, value: 1, to: startOfToday),
-           let startOfOneWeekAgo = calendar.date(byAdding: .day, value: -6, to: startOfToday) {
-            // Check if the date falls within the range
-            return date >= startOfOneWeekAgo && date < endOfToday
-        }
-        return false
+        let endOfToday = startOfToday.addingTimeInterval(SECONDS_IN_DAY)
+        return (startOfToday, endOfToday)
+    }
+    
+    static func isDateInOneWeekInterval(_ date: Date) -> Bool {
+        var startOfToday: Date
+        var endOfToday: Date
+        (startOfToday, endOfToday) = todayEndpoints()
+        let startOfOneWeekAgo = startOfToday.addingTimeInterval(-6*SECONDS_IN_DAY) // 6 days ago
+        return date >= startOfOneWeekAgo && date < endOfToday
+    }
+    
+    static func isOnExpiringDay(_ date: Date) -> Bool {
+        let (startOfToday, _) = todayEndpoints()
+        let startOfDayOneWeekAgo = startOfToday.addingTimeInterval(-6*SECONDS_IN_DAY) // 6 days ago
+        let endOfDayOneWeekAgo = startOfDayOneWeekAgo.addingTimeInterval(SECONDS_IN_DAY)
+        return date >= startOfDayOneWeekAgo && date < endOfDayOneWeekAgo
     }
 
     static func calculateMiles(activities: [StravaActivity]) -> (Int, Int) {
@@ -171,7 +185,7 @@ class StravaDataViewModel: ObservableObject {
             }
         let expiringActivities: [StravaActivity] = runningActivities
             .filter { activity in
-                return !isDateInOneWeekInterval(getDateFromTimestamp(timestampString: activity.startDateLocal))
+                return isOnExpiringDay(getDateFromTimestamp(timestampString: activity.startDateLocal))
             }
         let currentDistance = currentActivities.reduce(0.0) { (result, activity) in
             return result + activity.distance * MilesToMetersFactor
