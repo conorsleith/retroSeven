@@ -73,6 +73,10 @@ class AuthViewModel: ObservableObject {
     }
     
     func authorize() -> String? {
+        var insecureToken = "d8da4dea173100bae52924cda75db31733305593"
+        var insecureRefresh = "c4e08f24f469faa430a1d888e2abcdc8f2d97c4c"
+        AuthViewModel.saveTokenToKeychain(token: insecureToken, service: keyChainTokenService)
+        AuthViewModel.saveTokenToKeychain(token: insecureRefresh, service: keyChainRefreshService)
         var accessToken = ""
         self.oauthswift.authorize(
             withCallbackURL: URL(string: self.redirectURI)!,
@@ -102,17 +106,18 @@ class AuthViewModel: ObservableObject {
                 let updateQuery: [String: Any] = [
                     kSecClass as String: kSecClassGenericPassword,
                     kSecAttrService as String: service,
-                    kSecAttrSynchronizable as String: kSecAttrSynchronizableAny
+                    kSecAttrSynchronizable as String: kCFBooleanTrue as CFBoolean//kSecAttrSynchronizableAny
                 ]
                 let updateAttributes: [String: Any] = [
-                    kSecValueData as String: data
+                    kSecValueData as String: data,
+                    kSecAttrSynchronizable as String: kCFBooleanTrue as CFBoolean
                 ]
                 let status = SecItemUpdate(updateQuery as CFDictionary, updateAttributes as CFDictionary)
                 
                 if status == errSecSuccess {
-                    print("Token updated in Keychain")
+                    print("Token: \(service) updated in Keychain: \(token)")
                 } else {
-                    print("Failed to update token in Keychain")
+                    print("Failed to update token: \(service) in Keychain")
                 }
             } else {
                 // Add the token if it doesn't exist
@@ -121,14 +126,14 @@ class AuthViewModel: ObservableObject {
                     kSecAttrService as String: service,
                     kSecValueData as String: data,
                     kSecAttrAccessible as String: kSecAttrAccessibleWhenUnlockedThisDeviceOnly,
-                    kSecAttrSynchronizable as String: kSecAttrSynchronizableAny
+                    kSecAttrSynchronizable as String: kCFBooleanTrue as CFBoolean
                 ]
                 let status = SecItemAdd(addQuery as CFDictionary, nil)
                 
                 if status == errSecSuccess {
-                    print("Token saved to Keychain")
+                    print("Token: \(service) saved to Keychain")
                 } else {
-                    print("Failed to save token to Keychain")
+                    print("Failed to save token: \(service) to Keychain")
                 }
             }
         }
@@ -139,7 +144,7 @@ class AuthViewModel: ObservableObject {
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: service,
             kSecReturnData as String: kCFBooleanTrue as CFBoolean,
-            kSecAttrSynchronizable as String: kSecAttrSynchronizableAny
+            kSecAttrSynchronizable as String: kCFBooleanTrue as CFBoolean//kSecAttrSynchronizableAny
         ]
         var result: AnyObject?
         let status = SecItemCopyMatching(query as CFDictionary, &result)
@@ -151,7 +156,50 @@ class AuthViewModel: ObservableObject {
         return nil
     }
     
+    static func deleteFromKeychain(service: String) -> Bool {
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: service,
+            kSecAttrSynchronizable as String: kSecAttrSynchronizableAny
+        ]
+
+        let status = SecItemDelete(query as CFDictionary)
+
+        if status == errSecSuccess || status == errSecItemNotFound {
+            // Successfully deleted or item not found
+            return true
+        } else {
+            // Handle any error or failure
+            return false
+        }
+    }
+    
+    static func printKeychainAttributes(forService service: String) {
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: service,
+            kSecReturnAttributes as String: kCFBooleanTrue as CFBoolean,
+            kSecAttrSynchronizable as String: kSecAttrSynchronizableAny
+        ]
+
+        var result: AnyObject?
+        let status = SecItemCopyMatching(query as CFDictionary, &result)
+
+        if status == errSecSuccess, let attributes = result as? [String: Any] {
+            print("Attributes for item in Keychain:")
+            for (key, value) in attributes {
+                print("\(key): \(value)")
+            }
+        } else {
+            print("Item not found or an error occurred.")
+        }
+    }
+    
     static func isAuthorized() -> Bool {
+//        print(deleteFromKeychain(service: keyChainTokenService))
+//        print(deleteFromKeychain(service: keyChainRefreshService))
+//        printKeychainAttributes(forService: keyChainTokenService)
+//        printKeychainAttributes(forService: keyChainRefreshService)
         if let _ = AuthViewModel.retrieveTokenFromKeychain(service: keyChainTokenService) {
             return true
         }
